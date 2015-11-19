@@ -32,6 +32,31 @@ class SearchRestaurantListView(LocationRestaurantListView):
     def get_queryset(self):
     	incoming_query_string = self.request.GET.get('query', '')
     	return coremodels.LocationRestaurant.objects.filter(title__icontains=incoming_query_string)
+    	
+class SearchRestaurantPrice(LocationRestaurantListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationRestaurant.objects.filter(price=incoming_query_string)
+    	
+class SearchRestaurantType(LocationRestaurantListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationRestaurant.objects.filter(food=incoming_query_string)
+    	
+class SearchRestaurantCreditCard(LocationRestaurantListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationRestaurant.objects.filter(credit_card=incoming_query_string)
+    	
+class SearchRestaurantOutside(LocationRestaurantListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationRestaurant.objects.filter(outdoor=incoming_query_string)
+    	
+class SearchRestaurantWifi(LocationRestaurantListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationRestaurant.objects.filter(wifi=incoming_query_string)
 
 class LocationRestaurantDetailView(DetailView):
 	model = coremodels.LocationRestaurant
@@ -42,9 +67,9 @@ class LocationRestaurantDetailView(DetailView):
 		context = super(LocationRestaurantDetailView, self).get_context_data(**kwargs)
 		location = coremodels.LocationRestaurant.objects.get(id=self.kwargs['pk'])
 		if self.request.user.is_authenticated():
-			user_reviews = coremodels.ReviewRestaurant.objects.filter(location=location, user=self.request.user)
+			user_reviews = coremodels.ReviewRestaurant.objects.filter(location=location)
 			if user_reviews.count() > 0:
-				context['user_review'] = user_reviews[0]
+				context['user_review'] = user_reviews
 			else:
 				context['user_review'] = None
 		return context
@@ -96,6 +121,36 @@ class SearchBarListView(LocationBarListView):
     def get_queryset(self):
     	incoming_query_string = self.request.GET.get('query', '')
     	return coremodels.LocationBar.objects.filter(title__icontains=incoming_query_string)
+    	
+class SearchBarPrice(LocationBarListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationBar.objects.filter(price=incoming_query_string)
+    	
+class SearchBarFood(LocationBarListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationBar.objects.filter(food=incoming_query_string)
+    	
+class SearchBarType(LocationBarListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationBar.objects.filter(bar=incoming_query_string)
+    	
+class SearchBarCreditCard(LocationBarListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationBar.objects.filter(credit_card=incoming_query_string)
+    	
+class SearchBarOutside(LocationBarListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationBar.objects.filter(outdoor=incoming_query_string)
+    	
+class SearchBarWifi(LocationBarListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationBar.objects.filter(wifi=incoming_query_string)
 
 class LocationBarDetailView(DetailView):
 	model = coremodels.LocationBar
@@ -106,9 +161,9 @@ class LocationBarDetailView(DetailView):
 		context = super(LocationBarDetailView, self).get_context_data(**kwargs)
 		location = coremodels.LocationBar.objects.get(id=self.kwargs['pk'])
 		if self.request.user.is_authenticated():
-			user_reviews = coremodels.ReviewBar.objects.filter(location=location, user=self.request.user)
+			user_reviews = coremodels.ReviewBar.objects.filter(location=location)
 			if user_reviews.count() > 0:
-				context['user_review'] = user_reviews[0]
+				context['user_review'] = user_reviews
 			else:
 				context['user_review'] = None
 		return context
@@ -170,9 +225,9 @@ class LocationClubDetailView(DetailView):
 		context = super(LocationClubDetailView, self).get_context_data(**kwargs)
 		location = coremodels.LocationClub.objects.get(id=self.kwargs['pk'])
 		if self.request.user.is_authenticated():
-			user_reviews = coremodels.ReviewClub.objects.filter(location=location, user=self.request.user)
+			user_reviews = coremodels.ReviewClub.objects.filter(location=location)
 			if user_reviews.count() > 0:
-				context['user_review'] = user_reviews[0]
+				context['user_review'] = user_reviews
 			else:
 				context['user_review'] = None
 		return context

@@ -85,16 +85,7 @@
 
         <div>
             <div class="col-md-8">
-                {% if user_review %}
-                {% with user_review as review %}
-                <div>
-                    {% include 'base/review.html' %}
-                </div>
-
-
-                {% endwith %}
-                {% endif %}
-                {% for review in reviews %}
+                {% for review in user_review %}
                 {% include 'location/review.html' %}
                 <hr>
                 {% endfor %}

@@ -14,7 +14,60 @@
 <div class="row main-content">
 	<div class = "col-md-2"></div>
 	<div class = "col-md-8">
-			<h1>Bars</h1>
+		<div class='row'>
+			<div class = "col-md-5">
+				<h1>Bars</h1>
+			</div> 
+			<div class = "col-md-7">
+			<nav class="navbar navbar-inverse">
+  				<div class="container-fluid">
+   			 <div>
+      		<ul class="nav navbar-nav">
+        		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Price <span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            		<li><a href="/app/bars/search/price/?query=1">$</a></li>
+            		<li><a href="/app/bars/search/price/?query=2">$$</a></li>
+            		<li><a href="/app/bars/search/price/?query=3">$$$</a></li>
+          			</ul>
+        		</li>
+        		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Food<span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            		<li><a href="/app/bars/search/food/?query=1">Fast Food</a></li>
+            		<li><a href="/app/bars/search/food/?query=2">Chinese</a></li>
+            		<li><a href="/app/bars/search/food/?query=3">Sushi</a></li>
+            		<li><a href="/app/bars/search/food/?query=4">Mexican</a></li>
+            		<li><a href="/app/bars/search/food/?query=5">Argentine</a></li>
+            		<li><a href="/app/bars/search/food/?query=6">Vegetarian</a></li>
+            		<li><a href="/app/bars/search/food/?query=7">Italian</a></li>
+            		<li><a href="/app/bars/search/food/?query=8">Brazilian</a></li>
+            		<li><a href="/app/bars/search/food/?query=9">Seafood</a></li>
+            		<li><a href="/app/bars/search/food/?query=10">Street Vendors</a></li>
+            		<li><a href="/app/bars/search/food/?query=11">Coffee Shops</a></li>
+            		<li><a href="/app/bars/search/food/?query=12">American</a></li>
+          			</ul>
+        		</li>
+        		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Bar Type<span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            		<li><a href="/app/bars/search/type/?query=1">Sports Bar</a></li>
+            		<li><a href="/app/bars/search/type/?query=2">Beer Bar</a></li>
+            		<li><a href="/app/bars/search/type/?query=3">Hookah Bar</a></li>
+            		<li><a href="/app/bars/search/type/?query=4">Cocktail Bar</a></li>
+            		<li><a href="/app/bars/search/type/?query=5">Shots Bar</a></li>
+            		<li><a href="/app/bars/search/type/?query=6">Irish Pub</a></li>
+            		<li><a href="/app/bars/search/type/?query=7">Sushi Bar</a></li>
+            		<li><a href="/app/bars/search/type/?query=8">Other</a></li>
+          			</ul>
+        		</li>
+        		<li><a href="/app/bars/search/creditcard/?query=1">Credit Card</a></li>
+        		<li><a href="/app/bars/search/outside/?query=1">Outside</a></li>
+        		<li><a href="/app/bars/search/wifi/?query=1">WI-FI</a></li>
+      		</ul>
+    		</div>
+  			</div>
+			</nav>
+			</div>
+		</div>
+	
 	{% for location in object_list %}
 		<div class='row'>
 			<div class="col-md-8">
