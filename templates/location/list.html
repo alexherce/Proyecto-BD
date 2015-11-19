@@ -29,7 +29,7 @@
 			<p> {{ location.description }} <p>
 			{% include 'location/specifics.html' with location=location %}
 			{% if location.image_file %}
-				<img src= "{{location.image_file.url }}" class="img-responsive"></img>
+				<img src= "{{location.image_file.url }}" class="img-responsive" max-width='100%'></img>
 			{% endif %}
 		</div>
 		</div>
