@@ -25,6 +25,7 @@ class LandingSelectView(TemplateView):
 
 class LocationRestaurantListView(ListView):
 	model = coremodels.LocationRestaurant
+	queryset = coremodels.LocationRestaurant.objects.order_by('-created_at')
 	template_name = 'location/list.html'
 	paginate_by = 5
 
@@ -114,6 +115,7 @@ class ReviewRestaurantUpdateView(UpdateView):
 
 class LocationBarListView(ListView):
 	model = coremodels.LocationBar
+	queryset = coremodels.LocationBar.objects.order_by('-created_at')
 	template_name = 'bar/list.html'
 	paginate_by = 5
 
@@ -208,6 +210,7 @@ class ReviewBarUpdateView(UpdateView):
 
 class LocationClubListView(ListView):
 	model = coremodels.LocationClub
+	queryset = coremodels.LocationClub.objects.order_by('-created_at')
 	template_name = 'club/list.html'
 	paginate_by = 5
 

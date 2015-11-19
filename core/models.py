@@ -117,7 +117,7 @@ class LocationRestaurant(models.Model):
     position = GeopositionField(null=True, blank=True)
     hours = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    image_file = models.ImageField(upload_to = upload_to_location, null=True, blank = True)
+    image_file = models.ImageField(upload_to = upload_to_location, blank = True)
     food = models.IntegerField(choices=FOODTYPE_CHOICES, null=True, blank=True)
     wifi = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
     outlets = models.IntegerField(choices=PLURAL_CHOICES, null=True, blank=True)
