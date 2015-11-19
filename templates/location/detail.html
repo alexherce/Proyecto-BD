@@ -34,13 +34,15 @@
                             {% if location.image_file %}
                         <div class="col-md-12" >
                         
-                        <img src="{{ location.image_file.url }}" class="img-responsive img-centered full-width" alt="">
+                        <img src="{{ location.image_file.url }}" class="img-responsive img-centered full-width" alt="" max-width='100%'>
 
                       </div>
                       {% endif %}
                   
                   <div class="row">
-                    <div class="col-md-12" >{% include 'location/specifics.html' with location=location %}
+
+                    <div class="col-md-12" >
+                        {% include 'location/specifics.html' with location=location %}
                     </div>
                 </div>
         <div class="row">

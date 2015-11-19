@@ -20,16 +20,19 @@
 			<div class="col-md-8">
 				<h3><a href="{{ location.get_absolute_url }}">{{ location.title }}</a></h3>
 				{% if location.address %}<p><b> Location: </b> {{ location.address }} </b></p> {% endif %}
-			{% if location.hours %}<p> {{ location.hours }} </p> {% endif %}
+			</br>
 			<p> {{ location.description }} <p>
 			{% include 'location/specifics.html' with location=location %}
-			{% if location.image_file %}
-				<img src= "{{location.image_file.url }}" class="img-responsive" max-width='100%'></img>
-			{% endif %}
 			</div>
 			<div class="col-md-4 text-right">
 				<h3>{% include 'base/rating.html' with rating=location.get_average_rating %}
 				<img src= "{{location.image_file.url }}" class="img-responsive" max-width='100%'></img>
+				</div>
+			<div class="col-md-4 text-left">
+				{% if location.hours %}
+				<p><b>Hours:</b></p>
+				<p> {{ location.hours }} </p> 
+				{% endif %}
 			</div>
 		</div>
 		</div>

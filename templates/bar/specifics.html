@@ -1,5 +1,5 @@
 <div class="row">
-<div class="col-md-4">
+<div class="col-md-6">
  
 <p><b>Type: </b>{% if location.bar %}{{ location.get_bar_display }}{% else %}----{% endif %}</p>
 
@@ -9,7 +9,7 @@
 <p><b>Outdoor Seating: </b>{% if location.outdoor %}{{ location.get_outdoor_display }}{% else %}----{% endif %}</p>
 
 </div>
-<div class="col-md-4">
+<div class="col-md-6">
 <p><b>Wi-Fi: </b>{% if location.wifi %}{{ location.get_wifi_display }}{% else %}----{% endif %}</p>
 <p><b>Price: </b>{% if location.price %}{{ location.get_price_display }}{% else %}----{% endif %}</p>
 <p><b>Accepts Credit Cards: </b>{% if location.credit_card %}{{ location.get_credit_card_display }}{% else %}----{% endif %}</p>
