@@ -5,6 +5,7 @@
 
 <p><b>Food: </b>{% if location.food %}{{ location.get_food_display }}{% else %}----{% endif %}</p>
 <p><b>Bathrooms: </b>{% if location.bathrooms %}{{ location.get_bathrooms_display }}{% else %}----{% endif %}</p>
+
 <p><b>Outdoor Seating: </b>{% if location.outdoor %}{{ location.get_outdoor_display }}{% else %}----{% endif %}</p>
 
 </div>
