@@ -1,0 +1,56 @@
+{% extends "base/index.html" %}
+
+{% block navigation %}
+ <li>
+ <a class="page-scroll" href="/app/restaurants/">Restaurants</a>
+ </li> 
+ <li>
+ <a class="page-scroll" href="/app/bars/">Bars</a>
+ </li> 
+ <li>
+ <a class="page-scroll" href="/app/clubs/">Night Clubs</a>
+ </li>
+ {% if user.is_authenticated %}
+ {% ifequal request.path res %}
+ <li>
+ <a class="page-scroll" href="create/">Add a Restaurant</a>
+ </li> 
+ {% endifequal %}
+ {% ifequal request.path bar %}
+ <li>
+ <a class="page-scroll" href="create/">Add a Bar</a>
+ </li> 
+ {% endifequal %}
+ {% ifequal request.path club %}
+ <li>
+ <a class="page-scroll" href="create/">Add a Night Club</a>
+ </li> 
+ {% endifequal %}
+ <li>
+ <a class="page-scroll" href="/logout/">Log Out</a>
+ </li> 
+ {% else %}
+ <li>
+ <a class="page-scroll" href="/signup/">Sign Up</a>
+ </li> 
+ <li>
+ <a class="page-scroll" href="/login/">Log In</a>
+ </li> 
+ {% endif %} 
+{% endblock %}  
+
+{% ifnotequal request.path selector %}
+
+ {% block search %}
+ <form action="search" class="navbar-form navbar-right" method="get">
+ <div class="form-group">
+ <input type="text" placeholder="Search category" class="form-control" name="query"></input>
+ </div>
+ </form>
+ {% endblock %}
+
+{% endifnotequal %}
+
+{% block main_content %}
+
+{% endblock %}

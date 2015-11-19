@@ -1,0 +1,42 @@
+{% extends "base/theme.html" %}
+{% load staticfiles %}
+
+{% block main_content %}
+<div class="row main-content">
+	
+	<section id="team" class="bg-light-gray">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Search for reviews in our categories</h2>
+                    <h3 class="section-subheading text-muted">Click on one of the options or use the navigation bar.</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="{% static "img/res.jpg" %}" class="img-responsive img-circle" alt="">
+                        </br>
+                        <a href="restaurants" class="page-scroll btn btn-xl">Restaurants</a>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="{% static "img/bar.jpg" %}" class="img-responsive img-circle" alt="">
+                        </br>
+                        <a href="bars" class="page-scroll btn btn-xl">Bars</a>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="{% static "img/club.jpg" %}" class="img-responsive img-circle" alt="">
+                        </br>
+                        <a href="clubs" class="page-scroll btn btn-xl">Night Clubs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+	
+</div>
+{% endblock %}

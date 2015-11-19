@@ -1,0 +1,180 @@
+{% load staticfiles %}
+{% url 'select_page' as selector %}
+{% url 'res_page' as res %}
+{% url 'bar_page' as bar %}
+{% url 'clu_page' as club %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>PLACE ME</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static "css/agency.css" %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static "font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top navbar-shrink">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                {% if user.is_authenticated %}
+                <a class="navbar-brand page-scroll" href="/app">PLACE ME</a>
+                {% else %}
+                <a class="navbar-brand page-scroll" href="/">PLACE ME</a>
+                 {% endif %}
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    {% block navigation %}
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#services">How It Works</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a class="page-scroll" href="/app">Go To App</a>
+                    </li>
+                    {% else %}
+                     <li>
+                        <a class="page-scroll" href="/login">Log In</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="/signup">Sign Up</a>
+                    </li>
+                 {% endif %}
+                    {% endblock %}
+                </ul>
+                {% block search %}
+                {% endblock %}
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    {% block main_content %}
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-heading">Hi, we're PlaceMe.</div>
+                <div class="intro-lead-in">Find your favorite place away from home. We're curating some of the best places to eat, have some drinks and fun. </div>
+                {% if user.is_authenticated %}
+                <a href="/app" class="page-scroll btn btn-xl">Go to the app.</a>
+                {% else %}
+                <a href="#services" class="page-scroll btn btn-xl">How it works.</a>
+                <a href="/signup" class="page-scroll btn btn-xl">Sign up.</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">How It Works</h2>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <img class="coffeed-svg-icon" src="{% static "img/svg/python_flag.svg" %}"></>
+                    <h4 class="service-heading">Discover Amazing Spots</h4>
+                    <p class="text-muted">PlaceMe works hard to curate the best places for you to hang out.</p>
+                </div>
+                <div class="col-md-4">
+                    <img class="coffeed-svg-icon" src="{% static "img/svg/python_badge.svg" %}"></>
+                    <h4 class="service-heading">Review Your Favorites</h4>
+                    <p class="text-muted">Find out what other people are saying and chime in with your opinion. Help each other find the best work locale.</p>
+                </div>
+                <div class="col-md-4">
+                    <img class="coffeed-svg-icon" src="{% static "img/svg/python_rocket.svg" %}"></>
+                    <h4 class="service-heading">Promote Your Business</h4>
+                    <p class="text-muted">Anyone can add their location to PlaceMe for free. Sit back, relax & watch the reviews pour in.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endblock %}
+
+    <footer>
+        <div class="container">
+            {% block pagination %}
+            {% endblock %}
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="copyright">Copyright &copy; PlaceMe 2015</span>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline social-buttons">
+                        <li><a href="https://twitter.com/alexherce"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li><a href="https://twitter.com/luis_orive"><i class="fa fa-twitter"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline quicklinks">
+                        <li><a href="/terms">Terms and Conditions</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- jQuery -->
+    <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+    <script src="{% static "js/gmaps.js" %}"></script>
+    <script src="{% static "js/maps.js" %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static "js/bootstrap.min.js"%}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+</body>
+
+</html>

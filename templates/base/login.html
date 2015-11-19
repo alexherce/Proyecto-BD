@@ -1,0 +1,17 @@
+{% extends "base/theme.html" %}
+{% load sitegate %}
+{% block main_content %}
+
+<section id="services">
+ <div class="container">
+ <div class="row ">
+ <div class="my_signin_block">
+ <h2 class="section-heading"><a href="{{ location.get_absolute_url }}">Log In</a></h2>
+ <h3 class="section-subheading text-muted">Welcome back!</h3>
+{% sitegate_signin_form for ClassicSignin %}
+ </div>
+ </div>
+ </div>
+</section>
+
+{% endblock %}

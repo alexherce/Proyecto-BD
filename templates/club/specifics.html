@@ -1,0 +1,16 @@
+<div class="row">
+<div class="col-md-4">
+ 
+<p><b>Type: </b>{% if location.club %}{{ location.get_club_display }}{% else %}----{% endif %}</p>
+<p><b>Music: </b>{% if location.music %}{{ location.get_music_display }}{% else %}----{% endif %}</p>
+<p><b>Bathrooms: </b>{% if location.bathrooms %}{{ location.get_bathrooms_display }}{% else %}----{% endif %}</p>
+<p><b>Outdoor Seating: </b>{% if location.outdoor %}{{ location.get_outdoor_display }}{% else %}----{% endif %}</p>
+
+</div>
+<div class="col-md-4">
+<p><b>Free bar: </b>{% if location.free_bar %}{{ location.get_free_bar_display }}{% else %}----{% endif %}</p>
+<p><b>Price: </b>{% if location.price %}{{ location.get_price_display }}{% else %}----{% endif %}</p>
+<p><b>Entrance Fee: </b>{% if location.entrance_fee %}{{ location.get_entrance_fee_display }}{% else %}----{% endif %}</p>
+<p><b>Accepts Credit Cards: </b>{% if location.credit_card %}{{ location.get_credit_card_display }}{% else %}----{% endif %}</p>
+</div>
+</div>
