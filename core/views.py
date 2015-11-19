@@ -218,6 +218,36 @@ class SearchClubListView(LocationClubListView):
     def get_queryset(self):
     	incoming_query_string = self.request.GET.get('query', '')
     	return coremodels.LocationClub.objects.filter(title__icontains=incoming_query_string)
+    	
+class SearchClubPrice(LocationClubListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationClub.objects.filter(price=incoming_query_string)
+    	
+class SearchClubFee(LocationClubListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationClub.objects.filter(entrance_fee=incoming_query_string)
+    	
+class SearchClubType(LocationClubListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationClub.objects.filter(club=incoming_query_string)
+    	
+class SearchClubCreditCard(LocationClubListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationClub.objects.filter(credit_card=incoming_query_string)
+    	
+class SearchClubOutside(LocationClubListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationClub.objects.filter(outdoor=incoming_query_string)
+    	
+class SearchClubFreeBar(LocationClubListView):
+    def get_queryset(self):
+    	incoming_query_string = self.request.GET.get('query', '')
+    	return coremodels.LocationClub.objects.filter(free_bar=incoming_query_string)
 
 class LocationClubDetailView(DetailView):
 	model = coremodels.LocationClub

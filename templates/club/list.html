@@ -14,7 +14,53 @@
 <div class="row main-content">
 	<div class = "col-md-2"></div>
 	<div class = "col-md-8">
-			<h1>Night Clubs</h1>
+		<div class='row'>
+			<div class = "col-md-4">
+				<h1>Night Clubs</h1>
+			</div> 
+			<div class = "col-md-8">
+			<nav class="navbar navbar-inverse">
+  				<div class="container-fluid">
+   			 <div>
+      		<ul class="nav navbar-nav">
+        		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Price <span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            		<li><a href="/app/clubs/search/price/?query=1">$</a></li>
+            		<li><a href="/app/clubs/search/price/?query=2">$$</a></li>
+            		<li><a href="/app/clubs/search/price/?query=3">$$$</a></li>
+          			</ul>
+        		</li>
+        		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Entrance fee<span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            		<li><a href="/app/clubs/search/fee/?query=1">$1-%50</a></li>
+            		<li><a href="/app/clubs/search/fee/?query=2">$50-$100</a></li>
+            		<li><a href="/app/clubs/search/fee/?query=3">$100-$200</a></li>
+            		<li><a href="/app/clubs/search/fee/?query=4">$200-$300</a></li>
+            		<li><a href="/app/clubs/search/fee/?query=5">$300-$400</a></li>
+            		<li><a href="/app/clubs/search/fee/?query=6">$400-$500</a></li>
+            		<li><a href="/app/clubs/search/fee/?query=7">$500+</a></li>
+          			</ul>
+        		</li>
+        		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Music Type<span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            		<li><a href="/app/clubs/search/type/?query=1">Dance/Electronic</a></li>
+            		<li><a href="/app/clubs/search/type/?query=2">Karaoke</a></li>
+            		<li><a href="/app/clubs/search/type/?query=3">60s-70s-80s</a></li>
+            		<li><a href="/app/clubs/search/type/?query=4">Reggaeton</a></li>
+            		<li><a href="/app/clubs/search/type/?query=5">Salsa</a></li>
+            		<li><a href="/app/clubs/search/type/?query=6">Other</a></li>
+          			</ul>
+        		</li>
+        		<li><a href="/app/clubs/search/creditcard/?query=1">Credit Card</a></li>
+        		<li><a href="/app/clubs/search/outside/?query=1">Outside</a></li>
+        		<li><a href="/app/clubs/search/freebar/?query=1">Free Bar</a></li>
+      		</ul>
+    		</div>
+  			</div>
+			</nav>
+			</div>
+		</div>
+	
 	{% for location in object_list %}
 		<div class='row'>
 			<div class="col-md-8">
