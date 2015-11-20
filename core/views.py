@@ -10,6 +10,8 @@ from sitegate.decorators import signup_view
 from sitegate.signin_flows.classic import ClassicSignin
 from sitegate.decorators import signin_view
 
+import urllib, urllib2
+
 import core.models as coremodels
 
 class LandingView(TemplateView):
@@ -25,40 +27,22 @@ class LandingSelectView(TemplateView):
 
 class LocationRestaurantListView(ListView):
 	model = coremodels.LocationRestaurant
-	queryset = coremodels.LocationRestaurant.objects.order_by('-created_at')
+	queryset = coremodels.LocationRestaurant.objects.filter(verified='True').order_by('-created_at')
 	template_name = 'location/list.html'
 	paginate_by = 5
 
 class SearchRestaurantListView(LocationRestaurantListView):
     def get_queryset(self):
     	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationRestaurant.objects.filter(title__icontains=incoming_query_string)
+    	return coremodels.LocationRestaurant.objects.filter(verified='True', title__icontains=incoming_query_string)
     	
-class SearchRestaurantPrice(LocationRestaurantListView):
+class SearchRestaurantVariable(LocationRestaurantListView):
     def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationRestaurant.objects.filter(price=incoming_query_string)
+        incoming_query_string = self.request.GET.get('query', '')
+        variable_column = self.kwargs['slug']
+        filter = variable_column
+        return coremodels.LocationRestaurant.objects.filter(verified='True', **{ filter: incoming_query_string })
     	
-class SearchRestaurantType(LocationRestaurantListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationRestaurant.objects.filter(food=incoming_query_string)
-    	
-class SearchRestaurantCreditCard(LocationRestaurantListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationRestaurant.objects.filter(credit_card=incoming_query_string)
-    	
-class SearchRestaurantOutside(LocationRestaurantListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationRestaurant.objects.filter(outdoor=incoming_query_string)
-    	
-class SearchRestaurantWifi(LocationRestaurantListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationRestaurant.objects.filter(wifi=incoming_query_string)
-
 class LocationRestaurantDetailView(DetailView):
 	model = coremodels.LocationRestaurant
 	template_name = 'location/detail.html'
@@ -74,16 +58,16 @@ class LocationRestaurantDetailView(DetailView):
 			else:
 				context['user_review'] = None
 		return context
-
+		
 class LocationRestaurantCreateView(CreateView):
 	model = coremodels.LocationRestaurant
 	template_name = 'base/form.html'
-	fields = "__all__"
+	fields = ['title', 'description', 'address', 'position', 'hours', 'image_file', 'food', 'wifi', 'outlets', 'bathrooms', 'coffee', 'alcohol', 'outdoor', 'price', 'credit_card']
 
 class LocationRestaurantUpdateView(UpdateView):
     model = coremodels.LocationRestaurant
     template_name = 'base/form.html'
-    fields = "__all__"
+    fields = ['title', 'description', 'address', 'position', 'hours', 'image_file', 'food', 'wifi', 'outlets', 'bathrooms', 'coffee', 'alcohol', 'outdoor', 'price', 'credit_card']
 
 class ReviewRestaurantCreateView(CreateView):
     model = coremodels.ReviewRestaurant
@@ -115,44 +99,21 @@ class ReviewRestaurantUpdateView(UpdateView):
 
 class LocationBarListView(ListView):
 	model = coremodels.LocationBar
-	queryset = coremodels.LocationBar.objects.order_by('-created_at')
+	queryset = coremodels.LocationBar.objects.filter(verified='True').order_by('-created_at')
 	template_name = 'bar/list.html'
 	paginate_by = 5
 
 class SearchBarListView(LocationBarListView):
     def get_queryset(self):
     	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationBar.objects.filter(title__icontains=incoming_query_string)
+    	return coremodels.LocationBar.objects.filter(verified='True', title__icontains=incoming_query_string)
     	
-class SearchBarPrice(LocationBarListView):
+class SearchBarVariable(LocationBarListView):
     def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationBar.objects.filter(price=incoming_query_string)
-    	
-class SearchBarFood(LocationBarListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationBar.objects.filter(food=incoming_query_string)
-    	
-class SearchBarType(LocationBarListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationBar.objects.filter(bar=incoming_query_string)
-    	
-class SearchBarCreditCard(LocationBarListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationBar.objects.filter(credit_card=incoming_query_string)
-    	
-class SearchBarOutside(LocationBarListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationBar.objects.filter(outdoor=incoming_query_string)
-    	
-class SearchBarWifi(LocationBarListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationBar.objects.filter(wifi=incoming_query_string)
+        incoming_query_string = self.request.GET.get('query', '')
+        variable_column = self.kwargs['slug']
+        filter = variable_column
+        return coremodels.LocationBar.objects.filter(verified='True', **{ filter: incoming_query_string })
 
 class LocationBarDetailView(DetailView):
 	model = coremodels.LocationBar
@@ -173,12 +134,13 @@ class LocationBarDetailView(DetailView):
 class LocationBarCreateView(CreateView):
 	model = coremodels.LocationBar
 	template_name = 'base/form.html'
-	fields = "__all__"
+	fields = ['title', 'description', 'address', 'position', 'hours', 'image_file', 'bar', 'food', 'wifi', 'bathrooms', 'outdoor', 'price', 'credit_card']
+
 
 class LocationBarUpdateView(UpdateView):
     model = coremodels.LocationBar
     template_name = 'base/form.html'
-    fields = "__all__"
+    fields = ['title', 'description', 'address', 'position', 'hours', 'image_file', 'bar', 'food', 'wifi', 'bathrooms', 'outdoor', 'price', 'credit_card']
 
 class ReviewBarCreateView(CreateView):
     model = coremodels.ReviewBar
@@ -210,45 +172,22 @@ class ReviewBarUpdateView(UpdateView):
 
 class LocationClubListView(ListView):
 	model = coremodels.LocationClub
-	queryset = coremodels.LocationClub.objects.order_by('-created_at')
+	queryset = coremodels.LocationClub.objects.filter(verified='True').order_by('-created_at')
 	template_name = 'club/list.html'
 	paginate_by = 5
 
 class SearchClubListView(LocationClubListView):
     def get_queryset(self):
     	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationClub.objects.filter(title__icontains=incoming_query_string)
+    	return coremodels.LocationClub.objects.filter(verified='True', title__icontains=incoming_query_string)
     	
-class SearchClubPrice(LocationClubListView):
+class SearchClubVariable(LocationClubListView):
     def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationClub.objects.filter(price=incoming_query_string)
+        incoming_query_string = self.request.GET.get('query', '')
+        variable_column = self.kwargs['slug']
+        filter = variable_column
+        return coremodels.LocationClub.objects.filter(verified='True', **{ filter: incoming_query_string })
     	
-class SearchClubFee(LocationClubListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationClub.objects.filter(entrance_fee=incoming_query_string)
-    	
-class SearchClubType(LocationClubListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationClub.objects.filter(club=incoming_query_string)
-    	
-class SearchClubCreditCard(LocationClubListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationClub.objects.filter(credit_card=incoming_query_string)
-    	
-class SearchClubOutside(LocationClubListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationClub.objects.filter(outdoor=incoming_query_string)
-    	
-class SearchClubFreeBar(LocationClubListView):
-    def get_queryset(self):
-    	incoming_query_string = self.request.GET.get('query', '')
-    	return coremodels.LocationClub.objects.filter(free_bar=incoming_query_string)
-
 class LocationClubDetailView(DetailView):
 	model = coremodels.LocationClub
 	template_name = 'club/detail.html'
@@ -268,17 +207,17 @@ class LocationClubDetailView(DetailView):
 class LocationClubCreateView(CreateView):
 	model = coremodels.LocationClub
 	template_name = 'base/form.html'
-	fields = "__all__"
+	fields = ['title', 'description', 'address', 'position', 'hours', 'image_file', 'club', 'music', 'bathrooms', 'outdoor', 'free_bar', 'price', 'entrance_fee', 'credit_card']
 
 class LocationClubUpdateView(UpdateView):
     model = coremodels.LocationClub
     template_name = 'base/form.html'
-    fields = "__all__"
+    fields = ['title', 'description', 'address', 'position', 'hours', 'image_file', 'club', 'music', 'bathrooms', 'outdoor', 'free_bar', 'price', 'entrance_fee', 'credit_card']
 
 class ReviewClubCreateView(CreateView):
     model = coremodels.ReviewClub
     template_name = 'base/form.html'
-    fields =['description', 'rating']
+    fields = ['description', 'rating']
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -291,7 +230,7 @@ class ReviewClubCreateView(CreateView):
 class ReviewClubUpdateView(UpdateView):
     model = coremodels.ReviewClub
     template_name = 'base/form.html'
-    fields =['description', 'rating']
+    fields = ['description', 'rating']
 
     def get_object(self):
         return coremodels.ReviewClub.objects.get(location__id=self.kwargs['pk'], user=self.request.user)
