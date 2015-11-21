@@ -65,7 +65,7 @@
 				{% if location.address %}<p><b> Location: </b> {{ location.address }} </b></p> {% endif %}
 			</br>
 			<p> {{ location.description }} <p>
-			{% include 'location/specifics.html' with location=location %}
+			{% include 'restaurant/specifics.html' with location=location %}
 			</div>
 			<div class="col-md-4 text-right">
 				<h3>{% include 'base/rating.html' with rating=location.get_average_rating %}
