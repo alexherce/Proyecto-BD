@@ -1,0 +1,90 @@
+{% extends "base/theme.html" %}
+{% load bootstrap_pagination %}
+
+{% block title %}Restaurants{% endblock %}
+
+{% block main_content %}
+<div class="data-layer">
+	<ul>
+		
+	{% for location in object_list %}
+		<li class="location-data" data-latitude="{{ location.position.latitude }}" data-longitude="{{ location.position.longitude }}" data-id="{{ location.code }}">{{ location.title }}</li>
+	{% endfor %}
+	</ul>
+</div>
+<div id="map" class="wide-map"></div>
+<div class="row main-content">
+	<div class = "col-md-2"></div>
+	<div class = "col-md-8">
+		<div class='row'>
+			<div class = "col-md-6">
+				<h1>Restaurants</h1>
+			</div> 
+			<div class = "col-md-6">
+			<nav class="navbar navbar-inverse">
+  				<div class="container-fluid">
+   			 <div>
+      		<ul class="nav navbar-nav">
+        		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Price <span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            		<li><a href="/app/restaurants/search/price/?query=1">$</a></li>
+            		<li><a href="/app/restaurants/search/price/?query=2">$$</a></li>
+            		<li><a href="/app/restaurants/search/price/?query=3">$$$</a></li>
+          			</ul>
+        		</li>
+        		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Food<span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            		<li><a href="/app/restaurants/search/food/?query=1">Fast Food</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=2">Chinese</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=3">Sushi</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=4">Mexican</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=5">Argentine</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=6">Vegetarian</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=7">Italian</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=8">Brazilian</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=9">Seafood</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=10">Street Vendors</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=11">Coffee Shops</a></li>
+            		<li><a href="/app/restaurants/search/food/?query=12">American</a></li>
+          			</ul>
+        		</li>
+        		<li><a href="/app/restaurants/search/credit_card/?query=1">Credit Card</a></li>
+        		<li><a href="/app/restaurants/search/outdoor/?query=1">Outside</a></li>
+        		<li><a href="/app/restaurants/search/wifi/?query=1">WI-FI</a></li>
+      		</ul>
+    		</div>
+  			</div>
+			</nav>
+			</div>
+		</div>
+	
+	{% for location in object_list %}
+		<div class='row'>
+			<div class="col-md-8">
+				<h3><a href="{{ location.get_absolute_url }}">{{ location.title }}</a></h3>
+				{% if location.address %}<p><b> Location: </b> {{ location.address }} </b></p> {% endif %}
+			</br>
+			<p> {{ location.description }} <p>
+			{% include 'location/specifics.html' with location=location %}
+			</div>
+			<div class="col-md-4 text-right">
+				<h3>{% include 'base/rating.html' with rating=location.get_average_rating %}
+				<img src= "{{location.image_file.url }}" class="img-responsive" max-width='100%'></img>
+				</div>
+			<div class="col-md-4 text-left">
+				{% if location.hours %}
+				<p><b>Hours:</b></p>
+				<p> {{ location.hours }} </p> 
+				{% endif %}
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+	</div>
+	<div class="col-md-2"></div>
+</div>
+{% endblock %}
+
+{% block pagination %}
+ {% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
+{% endblock %}

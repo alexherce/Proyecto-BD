@@ -39,7 +39,7 @@ class LandingSelectView(TemplateView):
 class LocationRestaurantListView(ListView):
 	model = coremodels.LocationRestaurant
 	queryset = coremodels.LocationRestaurant.objects.filter(verified='True').order_by('-created_at')
-	template_name = 'location/list.html'
+	template_name = 'restaurant/list.html'
 	paginate_by = 5
 
 #Restaurant Search View. Only search by title.
@@ -58,7 +58,7 @@ class SearchRestaurantVariable(LocationRestaurantListView):
 
 #Restaurant Detailed View.    	
 class LocationRestaurantDetailView(DetailView):
-	template_name = 'location/detail.html'
+	template_name = 'restaurant/detail.html'
 	context_object_name ='location'
 	
 	def get_object(self):
