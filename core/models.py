@@ -153,7 +153,6 @@ class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, default='4kxtZo71SYyAY7fcGrMq1Q', verbose_name="Client Company")
 
-# Create your models here.
 # -------------------------------------------------
 # RESTAURANTS
 # -------------------------------------------------
