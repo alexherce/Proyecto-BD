@@ -4,6 +4,7 @@
 <script src="{{ STATIC_URL }}theme/js/gmaps.js"></script>
 <script src="{{ STATIC_URL }}theme/js/maps.js"></script>
 {% endblock %}
+{% block title %}{{ location.title }}{% endblock %}
 {% block main_content %}
 <div class="data-layer">
     <ul>
@@ -51,7 +52,7 @@
                 <p class="">{{ location.description}}</p>
                         <div class="">
                             {% if user.is_authenticated %}
-                            <a type="button" href="{% url 'locationres_update' pk=location.id %}" class="btn btn-default">Edit</a>
+                            <a type="button" href="{% url 'locationres_update' pk=location.code %}" class="btn btn-default">Edit</a>
                             {% endif %}
 
                         </div>
@@ -76,11 +77,7 @@
     <div class="col-md-12">
     <hr>
                 {% if user.is_authenticated %}
-                        {% if user_review %}
-                        <a type="button" href="{% url 'reviewres_update' pk=location.id %}" class="btn btn-default pull-right">Update Review</a>
-                        {% else %}
-                        <a type="button" href="{% url 'reviewres_create' pk=location.id %}" class="btn btn-default pull-right">Add Your Review</a>
-                        {% endif %}
+                        <a type="button" href="{% url 'reviewres_create' pk=location.code %}" class="btn btn-default pull-right">Add Your Review</a>
                 {% endif %}
     </div>
 

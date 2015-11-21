@@ -3,9 +3,13 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.db.models import Avg
 from geoposition.fields import GeopositionField
+from django.contrib.auth.models import User
 
 import os
 import uuid
+import base64
+
+import string
 
 RATING_CHOICES = (
     (0, 'None'),
@@ -102,13 +106,52 @@ ENTRANCEFEE_CHOICES = (
  (7, '$500+'),
  )
 
+# -------------------------------------------------
+# UPLOAD PICTURES TO AMAZON S3
+# -------------------------------------------------
+
 def upload_to_location(instance, filename):
     blocks = filename.split('.')
     ext = blocks[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
-    instance.title = blocks[0]
+    #instance.title = blocks[0]
     return os.path.join('uploads/', filename)
 
+# -------------------------------------------------
+# MAKES UNIQUE UUID BASE64 TO USE AS PRIMARY KEYS
+# -------------------------------------------------
+
+def make_uuid():
+	return base64.b64encode(uuid.uuid4().bytes).replace('=', '').replace('+', '-').replace('/', '-')
+ 
+# -------------------------------------------------
+# COMPANY (FOR ADMIN PANEL CREATE ONLY)
+# ------------------------------------------------- 
+
+class Company(models.Model):
+   
+   company_id = models.CharField(max_length=36, primary_key=True, default=make_uuid, editable=False, verbose_name="ID")
+   name = models.CharField(max_length=300, verbose_name="Company Name")
+   
+   class Meta:
+        permissions = (
+            ("can_publish", "Can Publish"),
+        )
+   
+   def get_absolute_url(self):
+		  return reverse(viewname="company_list", args=[self.company_id])
+   
+   def __unicode__(self):
+		  return self.name
+		  
+# -------------------------------------------------
+# CLIENT (EXTENDS DJANGO'S USER MODEL TO ADD
+# THE COMPANY TO THEIR PROFILE)
+# -------------------------------------------------
+
+class Client(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, default='4kxtZo71SYyAY7fcGrMq1Q', verbose_name="Client Company")
 
 # Create your models here.
 # -------------------------------------------------
@@ -116,29 +159,31 @@ def upload_to_location(instance, filename):
 # -------------------------------------------------
 
 class LocationRestaurant(models.Model):
-    title = models.CharField(max_length=300)
-    verified = models.BooleanField(default=False)
-    description = models.TextField(null=True)
-    address = models.TextField(null=True)
-    position = GeopositionField(null=True)
-    hours = models.TextField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    image_file = models.ImageField(upload_to = upload_to_location)
-    food = models.IntegerField(choices=FOODTYPE_CHOICES, null=True, blank=True)
-    wifi = models.IntegerField(choices=WIFI_CHOICES, null=True, blank=True)
-    outlets = models.IntegerField(choices=PLURAL_CHOICES, null=True, blank=True)
-    bathrooms = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
-    coffee = models.IntegerField(choices=COFFEE_CHOICES, null=True, blank=True)
-    alcohol = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
-    outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
-    price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True)
-    credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
+    code = models.CharField(max_length=36, primary_key=True, default=make_uuid, editable=False, verbose_name="ID")
+    company_id = models.ForeignKey(Company, verbose_name="Company ID")
+    title = models.CharField(max_length=300, verbose_name="Title")
+    verified = models.BooleanField(default=False, verbose_name="Verified Location")
+    description = models.TextField(null=True, verbose_name="Description")
+    address = models.TextField(null=True, verbose_name="Address")
+    position = GeopositionField(null=True, verbose_name="Map Position")
+    hours = models.TextField(null=True, verbose_name="Service Hours")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date Posted")
+    image_file = models.ImageField(upload_to = upload_to_location, verbose_name="Picture")
+    food = models.IntegerField(choices=FOODTYPE_CHOICES, null=True, blank=True, verbose_name="Food Type")
+    wifi = models.IntegerField(choices=WIFI_CHOICES, null=True, blank=True, verbose_name="Wi-Fi Connection")
+    outlets = models.IntegerField(choices=PLURAL_CHOICES, null=True, blank=True, verbose_name="Power Outlets")
+    bathrooms = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Bathrooms")
+    coffee = models.IntegerField(choices=COFFEE_CHOICES, null=True, blank=True, verbose_name="Coffee")
+    alcohol = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Alcohol")
+    outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Outdoor Seating")
+    price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
+    credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
 
     def __unicode__(self):
     	return self.title
 
     def get_absolute_url(self):
-    	return reverse(viewname="locationres_list", args=[self.id])
+    	return reverse(viewname="locationres_list", args=[self.code])
 
     def get_average_rating(self):
     	average = self.reviewrestaurant_set.all().aggregate(Avg('rating'))['rating__avg']
@@ -151,38 +196,42 @@ class LocationRestaurant(models.Model):
     	return self.reviewrestaurant_set.all()
 
 class ReviewRestaurant(models.Model):
-	location = models.ForeignKey(LocationRestaurant)
-	user = models.ForeignKey(User)
-	description = models.TextField(null=True, blank=True)
-	rating = models.IntegerField(choices=RATING_CHOICES, null=True, blank=True)
-	created_at = models.DateTimeField(auto_now_add=True)
+   location_name = models.CharField(max_length=300, null=True, blank=True, verbose_name="Location Name")
+   location = models.ForeignKey(LocationRestaurant, verbose_name="Location ID")
+   company_id = models.CharField(max_length=36, null=True, blank=True, verbose_name="Company Name")
+   user = models.ForeignKey(User)
+   description = models.TextField(null=True, verbose_name="Comments")
+   rating = models.IntegerField(choices=RATING_CHOICES, null=True, verbose_name="Rating")
+   created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date Posted")
 
 # -------------------------------------------------
 # BARS
 # -------------------------------------------------
 
 class LocationBar(models.Model):
-    title = models.CharField(max_length=300)
-    verified = models.BooleanField(default=False)
-    description = models.TextField(null=True)
-    address = models.TextField(null=True)
-    position = GeopositionField(null=True)
-    hours = models.TextField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    image_file = models.ImageField(upload_to = upload_to_location, null=True)
-    bar = models.IntegerField(choices=BARTYPE_CHOICES, null=True, blank=True)
-    food = models.IntegerField(choices=FOODTYPE_CHOICES, null=True, blank=True)
-    wifi = models.IntegerField(choices=WIFI_CHOICES, null=True, blank=True)
-    bathrooms = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
-    outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
-    price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True)
-    credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
+    code = models.CharField(max_length=36, primary_key=True, default=make_uuid, editable=False, verbose_name="ID")
+    company_id = models.ForeignKey(Company, verbose_name="Company ID")
+    title = models.CharField(max_length=300, verbose_name="Title")
+    verified = models.BooleanField(default=False, verbose_name="Verified Location")
+    description = models.TextField(null=True, verbose_name="Description")
+    address = models.TextField(null=True, verbose_name="Address")
+    position = GeopositionField(null=True, verbose_name="Map Position")
+    hours = models.TextField(null=True, verbose_name="Service Hours")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date Posted")
+    image_file = models.ImageField(upload_to = upload_to_location, null=True, verbose_name="Picture")
+    bar = models.IntegerField(choices=BARTYPE_CHOICES, null=True, blank=True, verbose_name="Bar Category")
+    food = models.IntegerField(choices=FOODTYPE_CHOICES, null=True, blank=True, verbose_name="Food Type")
+    wifi = models.IntegerField(choices=WIFI_CHOICES, null=True, blank=True, verbose_name="Wi-Fi Connection")
+    bathrooms = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Bathrooms")
+    outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Outdoor Seating")
+    price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
+    credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
 
     def __unicode__(self):
     	return self.title
 
     def get_absolute_url(self):
-    	return reverse(viewname="locationbar_list", args=[self.id])
+    	return reverse(viewname="locationbar_list", args=[self.code])
 
     def get_average_rating(self):
     	average = self.reviewbar_set.all().aggregate(Avg('rating'))['rating__avg']
@@ -196,11 +245,13 @@ class LocationBar(models.Model):
      return rev
 
 class ReviewBar(models.Model):
-	location = models.ForeignKey(LocationBar)
-	user = models.ForeignKey(User)
-	description = models.TextField(null=True, blank=True)
-	rating = models.IntegerField(choices=RATING_CHOICES, null=True, blank=True)
-	created_at = models.DateTimeField(auto_now_add=True)
+   location_name = models.CharField(max_length=300, null=True, blank=True, verbose_name="Location Name")
+   location = models.ForeignKey(LocationBar, verbose_name="Location ID")
+   company_id = models.CharField(max_length=36, null=True, blank=True, verbose_name="Company Name")
+   user = models.ForeignKey(User)
+   description = models.TextField(null=True, verbose_name="Comments")
+   rating = models.IntegerField(choices=RATING_CHOICES, null=True, verbose_name="Rating")
+   created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date Posted")
 	
 	
 # -------------------------------------------------
@@ -208,28 +259,31 @@ class ReviewBar(models.Model):
 # -------------------------------------------------
 
 class LocationClub(models.Model):
-    title = models.CharField(max_length=300)
-    verified = models.BooleanField(default=False)
-    description = models.TextField(null=True)
-    address = models.TextField(null=True)
-    position = GeopositionField(null=True)
-    hours = models.TextField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    image_file = models.ImageField(upload_to = upload_to_location, null=True)
-    club = models.IntegerField(choices=CLUBTYPE_CHOICES, null=True, blank=True)
-    music = models.IntegerField(choices=MUSICTYPE_CHOICES, null=True, blank=True)
-    bathrooms = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
-    outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
-    free_bar = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
-    price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True)
-    entrance_fee = models.IntegerField(choices=ENTRANCEFEE_CHOICES, null=True, blank=True)
-    credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True)
+    code = models.CharField(max_length=36, primary_key=True, default=make_uuid, editable=False, verbose_name="ID")
+    company_id = models.ForeignKey(Company, verbose_name="Company ID")
+    title = models.CharField(max_length=300, verbose_name="Title")
+    verified = models.BooleanField(default=False, verbose_name="Verified Location")
+    description = models.TextField(null=True, verbose_name="Description")
+    address = models.TextField(null=True, verbose_name="Address")
+    position = GeopositionField(null=True, verbose_name="Map Position")
+    hours = models.TextField(null=True, verbose_name="Service Hours")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date Posted")
+    image_file = models.ImageField(upload_to = upload_to_location, null=True, verbose_name="Picture")
+    club = models.IntegerField(choices=CLUBTYPE_CHOICES, null=True, blank=True, verbose_name="Club Type")
+    music = models.IntegerField(choices=MUSICTYPE_CHOICES, null=True, blank=True, verbose_name="Music Type")
+    bathrooms = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Bathrooms")
+    outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Outdoor Area")
+    free_bar = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Free Bar")
+    price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
+    entrance_fee = models.IntegerField(choices=ENTRANCEFEE_CHOICES, null=True, blank=True, verbose_name="Entrance Fee")
+    credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
+    avergage = models.IntegerField(null=True, blank=True, verbose_name="Average Ratings")
 
     def __unicode__(self):
     	return self.title
 
     def get_absolute_url(self):
-    	return reverse(viewname="locationclub_list", args=[self.id])
+    	return reverse(viewname="locationclub_list", args=[self.code])
 
     def get_average_rating(self):
     	average = self.reviewclub_set.all().aggregate(Avg('rating'))['rating__avg']
@@ -242,8 +296,10 @@ class LocationClub(models.Model):
     	return self.reviewclub_set.all()
 
 class ReviewClub(models.Model):
-	location = models.ForeignKey(LocationClub)
-	user = models.ForeignKey(User)
-	description = models.TextField(null=True, blank=True)
-	rating = models.IntegerField(choices=RATING_CHOICES, null=True, blank=True)
-	created_at = models.DateTimeField(auto_now_add=True)
+   location_name = models.CharField(max_length=300, null=True, blank=True, verbose_name="Location Name")
+   location = models.ForeignKey(LocationClub, verbose_name="Location ID")
+   company_id = models.CharField(max_length=36, null=True, blank=True, verbose_name="Company Name")
+   user = models.ForeignKey(User)
+   description = models.TextField(null=True, verbose_name="Comments")
+   rating = models.IntegerField(choices=RATING_CHOICES, null=True, verbose_name="Rating")
+   created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date Posted")

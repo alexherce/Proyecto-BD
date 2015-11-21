@@ -13,7 +13,7 @@ $( document ).ready(function() {
  lng: $(this).data('longitude'),
  title: $(this).html(),
  click: function(e) {
- window.open("detail/"+loc_id, "_self");
+ window.open(loc_id+"/detail/", "_self");
  }
  }); 
  });
