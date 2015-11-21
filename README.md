@@ -7,31 +7,25 @@
     ----------------------------------------------------------------- 
 
 
-Welcome to your Django project on Cloud9 IDE!
+Proyecto para la materia de Base de Datos. Desarrollado en el framework Django.
 
-Your Django project is already fully setup. Just click the "Run" button to start
-the application. On first run you will be asked to create an admin user. You can
-access your application from 'https://project-db-alexherce1.c9users.io/' and the admin page from 
-'https://project-db-alexherce1.c9users.io/admin'.
+Disponible en http://placemee.herokuapp.com.
 
-## Starting from the Terminal
+## Caracteristicas
 
-In case you want to run your Django application from the terminal just run:
+- Usuarios pueden crear cuentas y dejar reviews en cualquier ubicacion.
+- Usuarios pueden ser ascendidos a "clientes" en el panel de admin para poder crear ubicaciones. Solo los clientes pueden añadir ubicaciones a la app.
+- Los clientes pertenecen a una compañia/empresa, las ubicaciones se registran con el ID de dicha compañia.
+- Se pueden generar reportes en CSV para las ubicaciones y reviews de las compañias. Solo los miembros de la compañia lo pueden descargar. Miembros de compañias no pueden ver los datos de compañias ajenas.
+- Los admins pueden generar reportes con todas las ubicaciones y reviews en la app.
+- Usuarios no pueden descargar los reportes.
 
-1) Run syncdb command to sync models to database and create Django's default superuser and auth system
 
-    $ python manage.py syncdb
+## Cambios desde el jueves
 
-2) Run Django
-
-    $ python manage.py runserver $IP:$PORT
-    
-## Support & Documentation
-
-Django docs can be found at https://www.djangoproject.com/
-
-You may also want to follow the Django tutorial to create your first application:
-https://docs.djangoproject.com/en/1.8/intro/tutorial01/
-
-Visit http://docs.c9.io for support, or to learn more about using Cloud9 IDE.
-To watch some training videos, visit http://www.youtube.com/user/c9ide
+- Usuarios ya no pueden crear ubicaciones, solo los "clientes".
+- Los usuarios solo pueden ser ascendidos a clientes desde el panel de administracion.
+- Los admins deben aprobar las ubicaciones antes de que aparezcan en las listas. Si no es aprobada, solo se puede acceder via URL.
+- Se cambiaron las primary keys de numeros por UUIDs base64 para las URLs.
+- Se generan y descargan reportes de ubicaciones y reviews en CSV de acuerdo a la compañia a la que pertenece el usuario que la descarga. Usuarios normales no pueden descargar, usuarios de una compañia no pueden ver datos de otras compañias.
+- Se corrigio el problema en el que si ya existia un review, los demas usuarios solo lo podian editar, no se podia agregar con el boton.
