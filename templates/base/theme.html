@@ -11,7 +11,7 @@
  <a class="page-scroll" href="/app/clubs/">Night Clubs</a>
  </li>
  {% if user.is_authenticated %}
- {% if request.user.groups.all.0.name == 'clients' %}
+ {% if request.user.groups.all.0.name == 'Clients' %}
  {% ifequal request.path res %}
  <li>
  <a class="page-scroll" href="create/">Add a Restaurant</a>

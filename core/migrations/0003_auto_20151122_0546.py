@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0013_auto_20151119_1942'),
+        ('core', '0002_auto_20151121_2153'),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='locationrestaurant',
-            name='verified',
-            field=models.BooleanField(default=False),
+        migrations.RenameField(
+            model_name='locationclub',
+            old_name='avergage',
+            new_name='average',
         ),
     ]

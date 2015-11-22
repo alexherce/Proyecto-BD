@@ -3,6 +3,7 @@ from django.contrib import admin
 import core.views as coreviews
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 urlpatterns = patterns('',
 
@@ -53,6 +54,9 @@ urlpatterns = patterns('',
  url(r'signup/$', coreviews.register),
  url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/app/'}),
  
+ 
+ url(r'app/dashboard/$', staff_member_required(coreviews.gchart_demo)),
+ 
 # -------------------------------------------------
 # CLIENT EXPORT TO DOCUMENTS
 # Exports clients locations based on Company ID
@@ -68,5 +72,19 @@ urlpatterns = patterns('',
  url(r'app/dashboard/download_restaurants_reviews/csv/$', permission_required('core.can_publish')(coreviews.get_restaurants_reviews_csv)),
  url(r'app/dashboard/download_bars_reviews/csv/$', permission_required('core.can_publish')(coreviews.get_bars_reviews_csv)),
  url(r'app/dashboard/download_clubs_reviews/csv/$', permission_required('core.can_publish')(coreviews.get_clubs_reviews_csv)),
+ 
+# -------------------------------------------------
+# ADMIN EXPORT TO DOCUMENTS
+# Exports all locations. Only accessible to staff
+# members and admins.
+# -------------------------------------------------
+ 
+ url(r'app/dashboard/admin/download_restaurants/csv/$', staff_member_required(coreviews.get_restaurants_admin_csv)),
+ url(r'app/dashboard/admin/download_bars/csv/$', staff_member_required(coreviews.get_bars_admin_csv)),
+ url(r'app/dashboard/admin/download_clubs/csv/$', staff_member_required(coreviews.get_clubs_admin_csv)),
+ 
+ url(r'app/dashboard/admin/download_restaurants_reviews/csv/$', staff_member_required(coreviews.get_restaurants_reviews_admin_csv)),
+ url(r'app/dashboard/admin/download_bars_reviews/csv/$', staff_member_required(coreviews.get_bars_reviews_admin_csv)),
+ url(r'app/dashboard/admin/download_clubs_reviews/csv/$', staff_member_required(coreviews.get_clubs_reviews_admin_csv)),
  
 )

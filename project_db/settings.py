@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'sitegate',
     'bootstrap3',
     'geoposition',
+    'graphos',
     'bootstrap_pagination'
 )
 

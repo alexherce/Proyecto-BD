@@ -151,7 +151,7 @@ class Company(models.Model):
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    company = models.ForeignKey(Company, default='4kxtZo71SYyAY7fcGrMq1Q', verbose_name="Client Company")
+    company = models.ForeignKey(Company, default='a956e-QARFCDstd9IG6WsQ', verbose_name="Client Company")
 
 # -------------------------------------------------
 # RESTAURANTS
@@ -177,6 +177,7 @@ class LocationRestaurant(models.Model):
     outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Outdoor Seating")
     price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
     credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
+    average = models.IntegerField(null=True, blank=True, verbose_name="Average Ratings")
 
     def __unicode__(self):
     	return self.title
@@ -225,6 +226,7 @@ class LocationBar(models.Model):
     outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Outdoor Seating")
     price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
     credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
+    average = models.IntegerField(null=True, blank=True, verbose_name="Average Ratings")
 
     def __unicode__(self):
     	return self.title
@@ -259,6 +261,7 @@ class ReviewBar(models.Model):
 
 class LocationClub(models.Model):
     code = models.CharField(max_length=36, primary_key=True, default=make_uuid, editable=False, verbose_name="ID")
+    #user = models.ForeignKey(User)
     company_id = models.ForeignKey(Company, verbose_name="Company ID")
     title = models.CharField(max_length=300, verbose_name="Title")
     verified = models.BooleanField(default=False, verbose_name="Verified Location")
@@ -276,7 +279,7 @@ class LocationClub(models.Model):
     price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
     entrance_fee = models.IntegerField(choices=ENTRANCEFEE_CHOICES, null=True, blank=True, verbose_name="Entrance Fee")
     credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
-    avergage = models.IntegerField(null=True, blank=True, verbose_name="Average Ratings")
+    average = models.IntegerField(null=True, blank=True, verbose_name="Average Ratings")
 
     def __unicode__(self):
     	return self.title
@@ -287,7 +290,7 @@ class LocationClub(models.Model):
     def get_average_rating(self):
     	average = self.reviewclub_set.all().aggregate(Avg('rating'))['rating__avg']
     	if average == None:
-    		return average
+    		return 0
     	else:
     		return int(average)
 

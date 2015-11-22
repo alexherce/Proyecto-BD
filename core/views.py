@@ -10,6 +10,9 @@ from sitegate.signup_flows.classic import ClassicWithEmailSignup
 from sitegate.decorators import signup_view
 from sitegate.signin_flows.classic import ClassicSignin
 from sitegate.decorators import signin_view
+from django.contrib.admin.views.decorators import staff_member_required
+from graphos.sources.model import ModelDataSource
+from graphos.renderers import gchart
 
 import urllib, urllib2
 import djqscsv
@@ -112,6 +115,9 @@ class ReviewRestaurantCreateView(CreateView):
         return super(ReviewRestaurantCreateView, self).form_valid(form)
 
     def get_success_url(self):
+        obj = coremodels.LocationRestaurant.objects.get(pk=self.kwargs['pk'])
+        coremodels.LocationRestaurant.objects.filter(pk=self.kwargs['pk']).update(average=coremodels.LocationRestaurant.objects.get(pk=self.kwargs['pk']).get_average_rating())
+        obj.refresh_from_db()
         return self.object.location.get_absolute_url()
        
 # -------------------------------------------------
@@ -195,6 +201,9 @@ class ReviewBarCreateView(CreateView):
         return super(ReviewBarCreateView, self).form_valid(form)
 
     def get_success_url(self):
+        obj = coremodels.LocationBar.objects.get(pk=self.kwargs['pk'])
+        coremodels.LocationBar.objects.filter(pk=self.kwargs['pk']).update(average=coremodels.LocationBar.objects.get(pk=self.kwargs['pk']).get_average_rating())
+        obj.refresh_from_db()
         return self.object.location.get_absolute_url()
 
 # -------------------------------------------------
@@ -250,6 +259,7 @@ class LocationClubCreateView(CreateView):
     
     def form_valid(self, form):
 	    form.instance.company_id = self.request.user.client.company
+	    form.instance.user = self.request.user
 	    return super(LocationClubCreateView, self).form_valid(form)
     
     def get_success_url(self):
@@ -273,19 +283,22 @@ class ReviewClubCreateView(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.location = coremodels.LocationClub.objects.get(pk=self.kwargs['pk'])
-        #form.instance.average = coremodels.LocationClub.objects.get(pk=self.kwargs['pk']).get_average_rating()
         form.instance.company_id = coremodels.LocationClub.objects.get(pk=self.kwargs['pk']).company_id
         form.instance.location_name = coremodels.LocationClub.objects.get(pk=self.kwargs['pk']).title
         return super(ReviewClubCreateView, self).form_valid(form)
 
     def get_success_url(self):
+        obj = coremodels.LocationClub.objects.get(pk=self.kwargs['pk'])
+        coremodels.LocationClub.objects.filter(pk=self.kwargs['pk']).update(average=coremodels.LocationClub.objects.get(pk=self.kwargs['pk']).get_average_rating())
+        obj.refresh_from_db()
         return self.object.location.get_absolute_url()
         
 # -------------------------------------------------
 # ADMIN DASHBOARD
 # -------------------------------------------------
 
-
+class DashboardView(TemplateView):
+    template_name = 'dashboard/index.html'
 
 # -------------------------------------------------
 # LOGIN / LOGOUT VIEWS
@@ -338,3 +351,74 @@ def get_clubs_reviews_csv(request):
 # Exports all locations. Only accessible to staff
 # members and admins.
 # -------------------------------------------------
+
+def get_restaurants_admin_csv(request):
+    restaurants_qs = coremodels.LocationRestaurant.objects.all()
+    return djqscsv.render_to_csv_response(restaurants_qs, append_datestamp=True)
+    
+def get_bars_admin_csv(request):
+    qs = coremodels.LocationBar.objects.all()
+    return djqscsv.render_to_csv_response(qs, append_datestamp=True)
+    
+def get_clubs_admin_csv(request):
+    qs = coremodels.LocationClub.objects.all()
+    return djqscsv.render_to_csv_response(qs, append_datestamp=True)
+
+def get_restaurants_reviews_admin_csv(request):
+    restaurants_qs = coremodels.ReviewRestaurant.objects.all()
+    return djqscsv.render_to_csv_response(restaurants_qs, append_datestamp=True)
+    
+def get_bars_reviews_admin_csv(request):
+    qs = coremodels.ReviewBar.objects.all()
+    return djqscsv.render_to_csv_response(qs, append_datestamp=True)
+    
+def get_clubs_reviews_admin_csv(request):
+    qs = coremodels.ReviewClub.objects.all()
+    return djqscsv.render_to_csv_response(qs, append_datestamp=True)
+    
+    
+def chart_view(request):
+    queryset = coremodels.LocationRestaurant.objects.all()
+    data_source = ModelDataSource(queryset,
+                                      fields=['title', 'wifi'])
+    chart = gchart.LineChart(data_source, html_id="chart")
+
+    context = {
+                "chart": chart,
+                }
+    return context
+
+class Charts(TemplateView):
+    renderer = None
+
+    def get_context_data(self, **kwargs):
+        super_context = super(Charts, self).get_context_data(**kwargs)
+        queryset = coremodels.LocationRestaurant.objects.all()
+        data_source = ModelDataSource(queryset,
+                                      fields=['title', 'average'])
+        line_chart_res = gchart.LineChart(data_source, options={'title': "Average Restaurant Ratings"})
+        queryset = coremodels.LocationBar.objects.all()
+        data_source = ModelDataSource(queryset,
+                                      fields=['title', 'average'])
+        line_chart_bar = gchart.LineChart(data_source, options={'title': "Average Bar Ratings"})
+        queryset = coremodels.LocationClub.objects.all()
+        data_source = ModelDataSource(queryset,
+                                      fields=['title', 'average'])
+        line_chart_club = gchart.LineChart(data_source, options={'title': "Average Night Club Ratings"}) 
+
+        context = {
+                "line_chart_res": line_chart_res,
+                "line_chart_bar": line_chart_bar,
+                "line_chart_club": line_chart_club,
+                }
+        context.update(super_context)
+        return context
+        
+class GChartDemo(Charts):
+    template_name = "dashboard/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(GChartDemo, self).get_context_data(**kwargs)
+        return context
+        
+gchart_demo = GChartDemo.as_view(renderer=gchart)

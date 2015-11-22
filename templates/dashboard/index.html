@@ -1,0 +1,61 @@
+{% extends "base/theme.html" %}
+{% load staticfiles %}
+
+
+{% block title %}App{% endblock %}
+{% block main_content %}
+<div class="header-buffer">
+</div>
+<div class="row main-content">
+	
+	<div class="col-md-12">
+    <div class="row">
+        
+    <div class="col-md-1"></div>    
+     <div class="col-md-5">
+         
+            
+	<center>
+	    {{ line_chart_res.as_html }}
+	</center>
+	
+	    <script type="text/javascript"> document.getElementById('png').outerHTML = '<a href="' + chart.getImageURI() + '">Printable version</a>';</script>
+	    <div id='png'></div>
+	    
+	    </div>
+	    <div class="col-md-5">
+	           <center>
+	            {{ line_chart_bar.as_html }}
+	           </center>
+	         
+	        
+	      </div>
+	      <div class="col-md-1"></div>
+	    
+	 </div>
+	 
+	 <div class="row">
+        
+    <div class="col-md-1"></div>    
+     <div class="col-md-5">
+         
+            
+	<center>
+	    {{ line_chart_club.as_html }}
+	</center>
+	
+	    <script type="text/javascript"> document.getElementById('png').outerHTML = '<a href="' + chart.getImageURI() + '">Printable version</a>';</script>
+	    <div id='png'></div>
+	    
+	    </div>
+	    <div class="col-md-5">
+	         
+	        
+	      </div>
+	      <div class="col-md-1"></div>
+	    
+	 </div>
+	 </div>
+	
+</div>
+{% endblock %}
