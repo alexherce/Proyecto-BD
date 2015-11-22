@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Clubs</title>
+        <style type="text/css">
+            @page {
+                size: {{ pagesize }};
+                margin: 1cm;
+                @frame footer {
+                    -pdf-frame-content: footerContent;
+                    bottom: 0cm;
+                    margin-left: 9cm;
+                    margin-right: 9cm;
+                    height: 1cm;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="row">
+                <center><h1>PlaceMe Reviews by Location</h1></center>
+            </div>
+            {% for review in mylist %}
+            <div class="row">
+                <h2>- Location: {{ review.location_name }} (Location ID: {{ review.location.pk }}) </h2>
+                <div class="row">
+                     <div class="col-md-8">
+                         <h3>{{ review.user.get_username }} | {{ review.created_at | date }} | Rated: {{ review.rating }}</h3>
+                     </div>
+ 
+                </div>
+                <p><b>Comments: </b>{{ review.description }}</p>
+            {% endfor %}
+        </div>
+        <div id="footerContent">
+            {%block page_foot%}
+                Page <pdf:pagenumber>
+            {%endblock%}
+        </div>
+    </body>
+</html>

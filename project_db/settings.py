@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'geoposition',
     'graphos',
+    'xhtml2pdf',
     'bootstrap_pagination'
 )
 

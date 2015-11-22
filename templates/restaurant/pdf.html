@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Clubs</title>
+        <style type="text/css">
+            @page {
+                size: {{ pagesize }};
+                margin: 1cm;
+                @frame footer {
+                    -pdf-frame-content: footerContent;
+                    bottom: 0cm;
+                    margin-left: 9cm;
+                    margin-right: 9cm;
+                    height: 1cm;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="row">
+                <center><h1>PlaceMe Restaurant Locations</h1></center>
+            </div>
+            <table style="width:100%">
+            {% for location in mylist %}
+              <tr>
+                <td style="width:50%">
+                    
+                    <h1>{{ location.title }} (Average Rating: {{location.average }})</h1>
+				<p>Company ID: {{location.company_id }}</p>
+				{% if location.address %}<p><b> Address: </b> {{ location.address }} </b></p> {% endif %}
+			</br>
+			<p> Description: </p>
+			<p>{{ location.description }} <p>
+			    {% if location.hours %}
+				<p><b>Hours:</b></p>
+				<p> {{ location.hours }} </p> 
+				{% endif %}
+			{% include 'restaurant/specifics.html' with location=location %}
+                    
+                </td>
+                <td style="width:50%">
+                    <right><img src= "{{location.image_file.url }}" class="img-responsive" width='500px'></img></right>
+                </td>		
+              </tr>
+            {% endfor %}
+            </table>
+        </div>
+        <div id="footerContent">
+            {%block page_foot%}
+                Page <pdf:pagenumber>
+            {%endblock%}
+        </div>
+    </body>
+</html>

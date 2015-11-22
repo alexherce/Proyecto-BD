@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 
-{% block title %}App{% endblock %}
+{% block title %}Dashboard{% endblock %}
 {% block main_content %}
 <div class="header-buffer">
 </div>
@@ -10,7 +10,24 @@
 	
 	<div class="col-md-12">
     <div class="row">
-        
+        <div class="col-md-2"></div>
+    <div class="col-md-8">    
+        <center><h1>Dashboard for {{ user.client.company }}</h1></center>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+	         <div class="col-md-2"></div>
+	          <div class="col-md-8"> 
+	          <center>
+	             <a href="/app/company/restaurants" class="page-scroll btn btn-xl">Company restaurants</a>
+	             <a href="/app/company/bars" class="page-scroll btn btn-xl">Company bars</a>
+	             <a href="/app/company/clubs" class="page-scroll btn btn-xl">Company clubs</a>
+	             </center>
+	         </div>
+        <div class="col-md-2"></div>
+	         </div>
+    <div class="row">    
     <div class="col-md-1"></div>    
      <div class="col-md-5">
          
@@ -49,10 +66,56 @@
 	    
 	    </div>
 	    <div class="col-md-5">
+	         <center>
+	         <div class="row"></div>
+	         <div class="row">
+	             <h3>Download location reports</h3>
+	           </div>
+	           <div class="row">
+	             <p>Download location reports in CSV or PDF format. Limited to your company only.</p>
+	             <p>You can also download the review reports from all your locations.</p>
+	           </div>
+	           <div class="row">
+	               <div class="col-md-4"></div>
+	               <div class="col-md-2">
+	                   <right>
+	                 <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Locations
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu pull-right">
+                        <li><a href="/app/dashboard/download_restaurants/csv/">Restaurants Report (CSV)</a></li>
+                        <li><a href="/app/dashboard/download_restaurants/pdf/">Restaurants Report (PDF)</a></li>
+                        <li><a href="/app/dashboard/download_bars/csv/">Bars Report (CSV)</a></li>
+                        <li><a href="/app/dashboard/download_bars/pdf/">Bars Report (PDF)</a></li>
+                        <li><a href="/app/dashboard/download_clubs/csv/">Night Clubs Reports (CSV)</a></li>
+                        <li><a href="/app/dashboard/download_clubs/pdf/">Night Clubs Reports (PDF)</a></li>
+                      </ul>
+                    </div>
+                    </right>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <left>
+                    <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Reviews
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu pull-right">
+                        <li><a href="/app/dashboard/download_restaurants_reviews/csv/">Restaurants Report (CSV)</a></li>
+                        <li><a href="/app/dashboard/download_restaurants_reviews/pdf/">Restaurants Report (PDF)</a></li>
+                        <li><a href="/app/dashboard/download_bars_reviews/csv/">Bars Report (CSV)</a></li>
+                        <li><a href="/app/dashboard/download_bars_reviews/pdf/">Bars Report (PDF)</a></li>
+                        <li><a href="/app/dashboard/download_clubs_reviews/csv/">Night Clubs Reports (CSV)</a></li>
+                        <li><a href="/app/dashboard/download_clubs_reviews/pdf/">Night Clubs Reports (PDF)</a></li>
+                      </ul>
+                    </div>
+                    </left>
+                    </div>
+                    <div class="col-md-4"></div>
+	           </div>
 	         
-	        
-	      </div>
-	      <div class="col-md-1"></div>
+	        </center>
+	    </div>
+	    <div class="col-md-1"></div>
 	    
 	 </div>
 	 </div>

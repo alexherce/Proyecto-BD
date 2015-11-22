@@ -42,6 +42,7 @@
 {% endblock %}  
 
 {% ifnotequal request.path selector %}
+{% ifnotequal request.path dashboard %}
 
  {% block search %}
  <form action="search" class="navbar-form navbar-right" method="get">
@@ -51,6 +52,7 @@
  </form>
  {% endblock %}
 
+{% endifnotequal %}
 {% endifnotequal %}
 
 {% block main_content %}

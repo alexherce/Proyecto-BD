@@ -177,7 +177,7 @@ class LocationRestaurant(models.Model):
     outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Outdoor Seating")
     price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
     credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
-    average = models.IntegerField(null=True, blank=True, verbose_name="Average Ratings")
+    average = models.FloatField(null=True, blank=True, verbose_name="Average Ratings")
 
     def __unicode__(self):
     	return self.title
@@ -190,7 +190,7 @@ class LocationRestaurant(models.Model):
     	if average == None:
     		return average
     	else:
-    		return int(average)
+    		return average
 
     def get_reviews(self):
     	return self.reviewrestaurant_set.all()
@@ -226,7 +226,7 @@ class LocationBar(models.Model):
     outdoor = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Outdoor Seating")
     price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
     credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
-    average = models.IntegerField(null=True, blank=True, verbose_name="Average Ratings")
+    average = models.FloatField(null=True, blank=True, verbose_name="Average Ratings")
 
     def __unicode__(self):
     	return self.title
@@ -239,7 +239,7 @@ class LocationBar(models.Model):
     	if average == None:
     		return average
     	else:
-    		return int(average)
+    		return average
 
     def get_reviews(self):
      rev = self.reviewbar_set.all()
@@ -279,7 +279,7 @@ class LocationClub(models.Model):
     price = models.IntegerField(choices=PRICE_CHOICES, null=True, blank=True, verbose_name="Price Category")
     entrance_fee = models.IntegerField(choices=ENTRANCEFEE_CHOICES, null=True, blank=True, verbose_name="Entrance Fee")
     credit_card = models.IntegerField(choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Accepts Credit Cards")
-    average = models.IntegerField(null=True, blank=True, verbose_name="Average Ratings")
+    average = models.FloatField(null=True, blank=True, verbose_name="Average Ratings")
 
     def __unicode__(self):
     	return self.title
@@ -292,7 +292,7 @@ class LocationClub(models.Model):
     	if average == None:
     		return 0
     	else:
-    		return int(average)
+    		return average
 
     def get_reviews(self):
     	return self.reviewclub_set.all()

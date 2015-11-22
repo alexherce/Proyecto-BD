@@ -17,8 +17,27 @@ from graphos.renderers import gchart
 import urllib, urllib2
 import djqscsv
 
+import cStringIO as StringIO
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+from cgi import escape 
+
 from django.shortcuts import get_object_or_404
 import core.models as coremodels
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    context = Context(context_dict)
+    html  = template.render(context)
+    result = StringIO.StringIO()
+
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+
 
 # -------------------------------------------------
 # LANDING PAGE
@@ -43,7 +62,7 @@ class LocationRestaurantListView(ListView):
 	model = coremodels.LocationRestaurant
 	queryset = coremodels.LocationRestaurant.objects.filter(verified='True').order_by('-created_at')
 	template_name = 'restaurant/list.html'
-	paginate_by = 5
+	paginate_by = 10
 
 #Restaurant Search View. Only search by title.
 class SearchRestaurantListView(LocationRestaurantListView):
@@ -129,7 +148,7 @@ class LocationBarListView(ListView):
 	model = coremodels.LocationBar
 	queryset = coremodels.LocationBar.objects.filter(verified='True').order_by('-created_at')
 	template_name = 'bar/list.html'
-	paginate_by = 5
+	paginate_by = 10
 
 #Bar Search View. Only search by title.
 class SearchBarListView(LocationBarListView):
@@ -215,7 +234,7 @@ class LocationClubListView(ListView):
 	model = coremodels.LocationClub
 	queryset = coremodels.LocationClub.objects.filter(verified='True').order_by('-created_at')
 	template_name = 'club/list.html'
-	paginate_by = 5
+	paginate_by = 10
 
 #Night Club Search View. Only search by title.
 class SearchClubListView(LocationClubListView):
@@ -346,6 +365,66 @@ def get_clubs_reviews_csv(request):
     qs = coremodels.ReviewClub.objects.filter(company_id = request.user.client.company)
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
+def get_restaurants_pdf(request):
+    results = coremodels.LocationRestaurant.objects.filter(company_id = request.user.client.company)
+    return render_to_pdf(
+            'restaurant/pdf.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+        
+def get_bars_pdf(request):
+    results = coremodels.LocationBar.objects.filter(company_id = request.user.client.company)
+    return render_to_pdf(
+            'bar/pdf.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+    
+def get_clubs_pdf(request):
+    results = coremodels.LocationClub.objects.filter(company_id = request.user.client.company)
+    return render_to_pdf(
+            'club/pdf.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+        
+def get_restaurants_reviews_pdf(request):
+    results = coremodels.ReviewRestaurant.objects.filter(company_id = request.user.client.company)
+    return render_to_pdf(
+            'base/pdf_reviews.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+        
+def get_bars_reviews_pdf(request):
+    results = coremodels.ReviewBar.objects.filter(company_id = request.user.client.company)
+    return render_to_pdf(
+            'base/pdf_reviews.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+
+def get_clubs_reviews_pdf(request):
+    results = coremodels.ReviewClub.objects.filter(company_id = request.user.client.company)
+    return render_to_pdf(
+            'base/pdf_reviews.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+        
 # -------------------------------------------------
 # ADMIN EXPORT TO DOCUMENTS
 # Exports all locations. Only accessible to staff
@@ -376,32 +455,24 @@ def get_clubs_reviews_admin_csv(request):
     qs = coremodels.ReviewClub.objects.all()
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
-    
-def chart_view(request):
-    queryset = coremodels.LocationRestaurant.objects.all()
-    data_source = ModelDataSource(queryset,
-                                      fields=['title', 'wifi'])
-    chart = gchart.LineChart(data_source, html_id="chart")
-
-    context = {
-                "chart": chart,
-                }
-    return context
+# -------------------------------------------------
+# CLIENTS DASHBOARD
+# -------------------------------------------------
 
 class Charts(TemplateView):
     renderer = None
 
     def get_context_data(self, **kwargs):
         super_context = super(Charts, self).get_context_data(**kwargs)
-        queryset = coremodels.LocationRestaurant.objects.all()
+        queryset = coremodels.LocationRestaurant.objects.filter(company_id = self.request.user.client.company)
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_res = gchart.LineChart(data_source, options={'title': "Average Restaurant Ratings"})
-        queryset = coremodels.LocationBar.objects.all()
+        queryset = coremodels.LocationBar.objects.filter(company_id = self.request.user.client.company)
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_bar = gchart.LineChart(data_source, options={'title': "Average Bar Ratings"})
-        queryset = coremodels.LocationClub.objects.all()
+        queryset = coremodels.LocationClub.objects.filter(company_id = self.request.user.client.company)
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_club = gchart.LineChart(data_source, options={'title': "Average Night Club Ratings"}) 
@@ -414,11 +485,36 @@ class Charts(TemplateView):
         context.update(super_context)
         return context
         
-class GChartDemo(Charts):
+class Dashboard(Charts):
     template_name = "dashboard/index.html"
 
     def get_context_data(self, **kwargs):
-        context = super(GChartDemo, self).get_context_data(**kwargs)
+        context = super(Dashboard, self).get_context_data(**kwargs)
         return context
         
-gchart_demo = GChartDemo.as_view(renderer=gchart)
+dashboard_view = Dashboard.as_view(renderer=gchart)
+
+class CompanyRestaurantListView(ListView):
+	template_name = 'restaurant/list.html'
+	context_object_name ='location'
+	paginate_by = 10
+	
+	def get_queryset(self):
+		return coremodels.LocationRestaurant.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')
+		
+class CompanyBarListView(ListView):
+	template_name = 'bar/list.html'
+	context_object_name ='location'
+	paginate_by = 10
+	
+	def get_queryset(self):
+		return coremodels.LocationBar.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')
+		
+class CompanyClubListView(ListView):
+	template_name = 'club/list.html'
+	context_object_name ='location'
+	paginate_by = 10
+	
+	def get_queryset(self):
+		return coremodels.LocationClub.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')
+	

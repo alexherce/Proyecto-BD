@@ -54,8 +54,14 @@ urlpatterns = patterns('',
  url(r'signup/$', coreviews.register),
  url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/app/'}),
  
+ # -------------------------------------------------
+ # CLIENT DASHBOARD
+ # -------------------------------------------------
  
- url(r'app/dashboard/$', staff_member_required(coreviews.gchart_demo)),
+ url(r'app/dashboard/$', permission_required('core.can_publish')(coreviews.dashboard_view), name='dahboard_page'),
+ url(r'app/company/restaurants/$', coreviews.CompanyRestaurantListView.as_view(), name='res_company_page'),
+ url(r'app/company/bars/$', coreviews.CompanyBarListView.as_view(), name='bar_company_page'),
+ url(r'app/company/clubs/$', coreviews.CompanyClubListView.as_view(), name='clu_company_page'),
  
 # -------------------------------------------------
 # CLIENT EXPORT TO DOCUMENTS
@@ -72,6 +78,14 @@ urlpatterns = patterns('',
  url(r'app/dashboard/download_restaurants_reviews/csv/$', permission_required('core.can_publish')(coreviews.get_restaurants_reviews_csv)),
  url(r'app/dashboard/download_bars_reviews/csv/$', permission_required('core.can_publish')(coreviews.get_bars_reviews_csv)),
  url(r'app/dashboard/download_clubs_reviews/csv/$', permission_required('core.can_publish')(coreviews.get_clubs_reviews_csv)),
+ 
+ url(r'app/dashboard/download_restaurants/pdf/$', permission_required('core.can_publish')(coreviews.get_restaurants_pdf)),
+ url(r'app/dashboard/download_bars/pdf/$', permission_required('core.can_publish')(coreviews.get_bars_pdf)),
+ url(r'app/dashboard/download_clubs/pdf/$', permission_required('core.can_publish')(coreviews.get_clubs_pdf)),
+ 
+ url(r'app/dashboard/download_restaurants_reviews/pdf/$', permission_required('core.can_publish')(coreviews.get_restaurants_reviews_pdf)),
+ url(r'app/dashboard/download_bars_reviews/pdf/$', permission_required('core.can_publish')(coreviews.get_bars_reviews_pdf)),
+ url(r'app/dashboard/download_clubs_reviews/pdf/$', permission_required('core.can_publish')(coreviews.get_clubs_reviews_pdf)),
  
 # -------------------------------------------------
 # ADMIN EXPORT TO DOCUMENTS
