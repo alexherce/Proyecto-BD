@@ -9,6 +9,8 @@ from django.conf import settings
 
 class Migration(migrations.Migration):
 
+    replaces = [(b'core', '0001_initial'), (b'core', '0002_auto_20151121_2153'), (b'core', '0003_auto_20151122_0546'), (b'core', '0004_auto_20151122_0627'), (b'core', '0005_auto_20151122_2034'), (b'core', '0006_auto_20151122_2037'), (b'core', '0007_auto_20151122_2039')]
+
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
@@ -142,11 +144,36 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='client',
             name='company',
-            field=models.ForeignKey(default=b'4kxtZo71SYyAY7fcGrMq1Q', verbose_name=b'Client Company', to='core.Company'),
+            field=models.ForeignKey(default=b'a956e-QARFCDstd9IG6WsQ', verbose_name=b'Client Company', to='core.Company'),
         ),
         migrations.AddField(
             model_name='client',
             name='user',
             field=models.OneToOneField(to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.RenameField(
+            model_name='locationclub',
+            old_name='avergage',
+            new_name='average',
+        ),
+        migrations.AddField(
+            model_name='locationbar',
+            name='average',
+            field=models.FloatField(null=True, verbose_name=b'Average Ratings', blank=True),
+        ),
+        migrations.AddField(
+            model_name='locationrestaurant',
+            name='average',
+            field=models.FloatField(null=True, verbose_name=b'Average Ratings', blank=True),
+        ),
+        migrations.AlterField(
+            model_name='locationclub',
+            name='average',
+            field=models.DecimalField(null=True, verbose_name=b'Average Ratings', max_digits=2, decimal_places=1, blank=True),
+        ),
+        migrations.AlterField(
+            model_name='locationclub',
+            name='average',
+            field=models.FloatField(null=True, verbose_name=b'Average Ratings', blank=True),
         ),
     ]
