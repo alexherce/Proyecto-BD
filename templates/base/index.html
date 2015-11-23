@@ -59,8 +59,10 @@
                     <span class="icon-bar"></span>
                 </button>
                  {% if user.is_authenticated %}
-                 {% if request.user.groups.all.0.name == 'Clients' %}
-                <a class="navbar-brand page-scroll" href="/app/dashboard">PLACE ME</a>
+                 {% if request.user.is_superuser %}
+                <a class="navbar-brand page-scroll" href="/app/dashboard/admin">PLACE ME</a>
+                {% elif request.user.groups.all.0.name == 'Clients' %}
+                <a class="navbar-brand page-scroll" href="/app/dashboard/">PLACE ME</a>
                 {% else %}
                 <a class="navbar-brand page-scroll" href="/app/">PLACE ME</a>
                 {% endif %}

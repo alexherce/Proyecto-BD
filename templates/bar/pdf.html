@@ -25,12 +25,12 @@
             {% for location in mylist %}
               <tr>
                 <td style="width:50%">
-                    
-                    <h1>{{ location.title }} (Average Rating: {{location.average }})</h1>
+                    </br>
+                    </br>
+                    <h1>- {{ location.title }} (Average Rating: {{location.average }})</h1>
 				<p>Company ID: {{location.company_id }}</p>
 				{% if location.address %}<p><b> Address: </b> {{ location.address }} </b></p> {% endif %}
-			</br>
-			<p> Description: </p>
+			<p><b>Description: </b></p>
 			<p>{{ location.description }} <p>
 			    {% if location.hours %}
 				<p><b>Hours:</b></p>

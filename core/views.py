@@ -455,10 +455,73 @@ def get_clubs_reviews_admin_csv(request):
     qs = coremodels.ReviewClub.objects.all()
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
+def get_restaurants_admin_pdf(request):
+    results = coremodels.LocationRestaurant.objects.all()
+    return render_to_pdf(
+            'restaurant/pdf.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+        
+def get_bars_admin_pdf(request):
+    results = coremodels.LocationBar.objects.all()
+    return render_to_pdf(
+            'bar/pdf.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+    
+def get_clubs_admin_pdf(request):
+    results = coremodels.LocationClub.objects.all()
+    return render_to_pdf(
+            'club/pdf.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+        
+def get_restaurants_reviews_admin_pdf(request):
+    results = coremodels.ReviewRestaurant.objects.all()
+    return render_to_pdf(
+            'base/pdf_reviews.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+        
+def get_bars_reviews_admin_pdf(request):
+    results = coremodels.ReviewBar.objects.all()
+    return render_to_pdf(
+            'base/pdf_reviews.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+
+def get_clubs_reviews_admin_pdf(request):
+    results = coremodels.ReviewClub.objects.all()
+    return render_to_pdf(
+            'base/pdf_reviews.html',
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+        
+    
 # -------------------------------------------------
 # CLIENTS DASHBOARD
+# Accesible to users with an assigned company.
 # -------------------------------------------------
 
+#Generates charts using Google Charts api.
 class Charts(TemplateView):
     renderer = None
 
@@ -484,7 +547,8 @@ class Charts(TemplateView):
                 }
         context.update(super_context)
         return context
-        
+  
+#Renders dashboard and charts on it.        
 class Dashboard(Charts):
     template_name = "dashboard/index.html"
 
@@ -494,6 +558,7 @@ class Dashboard(Charts):
         
 dashboard_view = Dashboard.as_view(renderer=gchart)
 
+#List Company Restaurants    
 class CompanyRestaurantListView(ListView):
 	template_name = 'restaurant/list.html'
 	context_object_name ='location'
@@ -501,7 +566,8 @@ class CompanyRestaurantListView(ListView):
 	
 	def get_queryset(self):
 		return coremodels.LocationRestaurant.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')
-		
+
+#List Company Bars 		
 class CompanyBarListView(ListView):
 	template_name = 'bar/list.html'
 	context_object_name ='location'
@@ -509,7 +575,8 @@ class CompanyBarListView(ListView):
 	
 	def get_queryset(self):
 		return coremodels.LocationBar.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')
-		
+
+#List Company Clubs 		
 class CompanyClubListView(ListView):
 	template_name = 'club/list.html'
 	context_object_name ='location'
@@ -518,3 +585,44 @@ class CompanyClubListView(ListView):
 	def get_queryset(self):
 		return coremodels.LocationClub.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')
 	
+# -------------------------------------------------
+# ADMIN DASHBOARD
+# Accesible to admins only.
+# -------------------------------------------------
+
+#Generates charts using Google Charts api.
+class AdminCharts(TemplateView):
+    renderer = None
+
+    def get_context_data(self, **kwargs):
+        super_context = super(AdminCharts, self).get_context_data(**kwargs)
+        queryset = coremodels.LocationRestaurant.objects.all()
+        data_source = ModelDataSource(queryset,
+                                      fields=['title', 'average'])
+        line_chart_res = gchart.LineChart(data_source, options={'title': "Average Restaurant Ratings"})
+        queryset = coremodels.LocationBar.objects.all()
+        data_source = ModelDataSource(queryset,
+                                      fields=['title', 'average'])
+        line_chart_bar = gchart.LineChart(data_source, options={'title': "Average Bar Ratings"})
+        queryset = coremodels.LocationClub.objects.all()
+        data_source = ModelDataSource(queryset,
+                                      fields=['title', 'average'])
+        line_chart_club = gchart.LineChart(data_source, options={'title': "Average Night Club Ratings"}) 
+
+        context = {
+                "line_chart_res": line_chart_res,
+                "line_chart_bar": line_chart_bar,
+                "line_chart_club": line_chart_club,
+                }
+        context.update(super_context)
+        return context
+  
+#Renders dashboard and charts on it.        
+class AdminDashboard(AdminCharts):
+    template_name = "dashboard/admin.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminDashboard, self).get_context_data(**kwargs)
+        return context
+        
+admindashboard_view = AdminDashboard.as_view(renderer=gchart)

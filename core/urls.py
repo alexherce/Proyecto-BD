@@ -52,16 +52,16 @@ urlpatterns = patterns('',
  # -------------------------------------------------
  url(r'login/$', coreviews.login),
  url(r'signup/$', coreviews.register),
- url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/app/'}),
+ url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/app'}),
  
  # -------------------------------------------------
  # CLIENT DASHBOARD
  # -------------------------------------------------
  
  url(r'app/dashboard/$', permission_required('core.can_publish')(coreviews.dashboard_view), name='dahboard_page'),
- url(r'app/company/restaurants/$', coreviews.CompanyRestaurantListView.as_view(), name='res_company_page'),
- url(r'app/company/bars/$', coreviews.CompanyBarListView.as_view(), name='bar_company_page'),
- url(r'app/company/clubs/$', coreviews.CompanyClubListView.as_view(), name='clu_company_page'),
+ url(r'app/company/restaurants/$', permission_required('core.can_publish')(coreviews.CompanyRestaurantListView.as_view()), name='res_company_page'),
+ url(r'app/company/bars/$', permission_required('core.can_publish')(coreviews.CompanyBarListView.as_view()), name='bar_company_page'),
+ url(r'app/company/clubs/$', permission_required('core.can_publish')(coreviews.CompanyClubListView.as_view()), name='clu_company_page'),
  
 # -------------------------------------------------
 # CLIENT EXPORT TO DOCUMENTS
@@ -88,6 +88,12 @@ urlpatterns = patterns('',
  url(r'app/dashboard/download_clubs_reviews/pdf/$', permission_required('core.can_publish')(coreviews.get_clubs_reviews_pdf)),
  
 # -------------------------------------------------
+# ADMIN DASHBOARD
+# -------------------------------------------------
+ 
+ url(r'app/dashboard/admin/$', staff_member_required(coreviews.admindashboard_view), name='admindahboard_page'),
+
+# -------------------------------------------------
 # ADMIN EXPORT TO DOCUMENTS
 # Exports all locations. Only accessible to staff
 # members and admins.
@@ -100,5 +106,13 @@ urlpatterns = patterns('',
  url(r'app/dashboard/admin/download_restaurants_reviews/csv/$', staff_member_required(coreviews.get_restaurants_reviews_admin_csv)),
  url(r'app/dashboard/admin/download_bars_reviews/csv/$', staff_member_required(coreviews.get_bars_reviews_admin_csv)),
  url(r'app/dashboard/admin/download_clubs_reviews/csv/$', staff_member_required(coreviews.get_clubs_reviews_admin_csv)),
+ 
+ url(r'app/dashboard/admin/download_restaurants/pdf/$', staff_member_required(coreviews.get_restaurants_admin_pdf)),
+ url(r'app/dashboard/admin/download_bars/pdf/$', staff_member_required(coreviews.get_bars_admin_pdf)),
+ url(r'app/dashboard/admin/download_clubs/pdf/$', staff_member_required(coreviews.get_clubs_admin_pdf)),
+ 
+ url(r'app/dashboard/admin/download_restaurants_reviews/pdf/$', staff_member_required(coreviews.get_restaurants_reviews_admin_pdf)),
+ url(r'app/dashboard/admin/download_bars_reviews/pdf/$', staff_member_required(coreviews.get_bars_reviews_admin_pdf)),
+ url(r'app/dashboard/admin/download_clubs_reviews/pdf/$', staff_member_required(coreviews.get_clubs_reviews_admin_pdf)),
  
 )

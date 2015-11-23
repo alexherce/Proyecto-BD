@@ -1,0 +1,122 @@
+{% extends "base/theme.html" %}
+{% load staticfiles %}
+
+
+{% block title %}Dashboard{% endblock %}
+{% block main_content %}
+<div class="header-buffer">
+</div>
+<div class="row main-content">
+	
+	<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-2"></div>
+    <div class="col-md-8">    
+        <center><h1>Admin Dashboard</h1></center>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+	         <div class="col-md-2"></div>
+	          <div class="col-md-8"> 
+	          <center>
+	             <a href="/admin" class="page-scroll btn btn-xl">Access to Admin Panel</a>
+	             </center>
+	         </div>
+        <div class="col-md-2"></div>
+	         </div>
+    <div class="row">    
+    <div class="col-md-1"></div>    
+     <div class="col-md-5">
+         
+            
+	<center>
+	    {{ line_chart_res.as_html }}
+	</center>
+	
+	    <script type="text/javascript"> document.getElementById('png').outerHTML = '<a href="' + chart.getImageURI() + '">Printable version</a>';</script>
+	    <div id='png'></div>
+	    
+	    </div>
+	    <div class="col-md-5">
+	           <center>
+	            {{ line_chart_bar.as_html }}
+	           </center>
+	         
+	        
+	      </div>
+	      <div class="col-md-1"></div>
+	    
+	 </div>
+	 
+	 <div class="row">
+        
+    <div class="col-md-1"></div>    
+     <div class="col-md-5">
+         
+            
+	<center>
+	    {{ line_chart_club.as_html }}
+	</center>
+	
+	    <script type="text/javascript"> document.getElementById('png').outerHTML = '<a href="' + chart.getImageURI() + '">Printable version</a>';</script>
+	    <div id='png'></div>
+	    
+	    </div>
+	    <div class="col-md-5">
+	         <center>
+	         <div class="row"></div>
+	         <div class="row">
+	             <h3>Download location reports</h3>
+	           </div>
+	           <div class="row">
+	             <p>Download location reports in CSV or PDF format. All locations in database included.</p>
+	             <p>You can also download the review reports from all locations.</p>
+	           </div>
+	           <div class="row">
+	               <div class="col-md-4"></div>
+	               <div class="col-md-2">
+	                   <right>
+	                 <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Locations
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu pull-right">
+                        <li><a href="/app/dashboard/admin/download_restaurants/csv/">Restaurants Report (CSV)</a></li>
+                        <li><a href="/app/dashboard/admin/download_restaurants/pdf/">Restaurants Report (PDF)</a></li>
+                        <li><a href="/app/dashboard/admin/download_bars/csv/">Bars Report (CSV)</a></li>
+                        <li><a href="/app/dashboard/admin/download_bars/pdf/">Bars Report (PDF)</a></li>
+                        <li><a href="/app/dashboard/admin/download_clubs/csv/">Night Clubs Reports (CSV)</a></li>
+                        <li><a href="/app/dashboard/admin/download_clubs/pdf/">Night Clubs Reports (PDF)</a></li>
+                      </ul>
+                    </div>
+                    </right>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <left>
+                    <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Reviews
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu pull-right">
+                        <li><a href="/app/dashboard/admin/download_restaurants_reviews/csv/">Restaurants Report (CSV)</a></li>
+                        <li><a href="/app/dashboard/admin/download_restaurants_reviews/pdf/">Restaurants Report (PDF)</a></li>
+                        <li><a href="/app/dashboard/admin/download_bars_reviews/csv/">Bars Report (CSV)</a></li>
+                        <li><a href="/app/dashboard/admin/download_bars_reviews/pdf/">Bars Report (PDF)</a></li>
+                        <li><a href="/app/dashboard/admin/download_clubs_reviews/csv/">Night Clubs Reports (CSV)</a></li>
+                        <li><a href="/app/dashboard/admin/download_clubs_reviews/pdf/">Night Clubs Reports (PDF)</a></li>
+                      </ul>
+                    </div>
+                    </left>
+                    </div>
+                    <div class="col-md-4"></div>
+	           </div>
+	         
+	        </center>
+	    </div>
+	    <div class="col-md-1"></div>
+	    
+	 </div>
+	 </div>
+	
+</div>
+{% endblock %}
