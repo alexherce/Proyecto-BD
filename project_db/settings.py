@@ -86,6 +86,8 @@ WSGI_APPLICATION = 'project_db.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+# Configuration for Heroku:
+# Run this first: heroku config:set ON_HEROKU=1
 ON_HEROKU = os.environ.get('ON_HEROKU')
 
 if ON_HEROKU == '1':
