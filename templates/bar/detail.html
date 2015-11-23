@@ -48,7 +48,9 @@
                 <p class="">{{ location.description}}</p>
                         <div class="">
                             {% if user.is_authenticated %}
+                            {% if location.company_id == user.client.company %}
                             <a type="button" href="{% url 'locationbar_update' pk=location.code %}" class="btn btn-default">Edit</a>
+                            {% endif %}
                             {% endif %}
 
                         </div>
