@@ -62,6 +62,7 @@ FOODTYPE_CHOICES = (
  (12, 'Food Truck'),
  (13, 'Gourmet'),
  (14, 'Japanese'),
+ (15, 'American'),
  )
  
 PRICE_CHOICES = (
@@ -80,7 +81,8 @@ BARTYPE_CHOICES = (
  (5, 'Shots Bar'),
  (6, 'Irish Pub'),
  (7, 'Hookah Bar'),
- (8, 'Other'),
+ (8, 'Sushi Bar'),
+ (9, 'Other'),
  )
  
 CLUBTYPE_CHOICES = (
@@ -100,12 +102,12 @@ MUSICTYPE_CHOICES = (
  
 ENTRANCEFEE_CHOICES = (
  (0, 'None'),
- (1, '$1-$50'),
- (2, '$50-$100'),
- (3, '$100-$200'),
- (4, '$200-$300'),
- (5, '$300-$400'),
- (6, '$400-$500'),
+ (1, '$1-$49'),
+ (2, '$50-$99'),
+ (3, '$100-$199'),
+ (4, '$200-$299'),
+ (5, '$300-$399'),
+ (6, '$400-$499'),
  (7, '$500+'),
  )
 
