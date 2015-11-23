@@ -527,15 +527,15 @@ class Charts(TemplateView):
 
     def get_context_data(self, **kwargs):
         super_context = super(Charts, self).get_context_data(**kwargs)
-        queryset = coremodels.LocationRestaurant.objects.filter(company_id = self.request.user.client.company)
+        queryset = coremodels.LocationRestaurant.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')[:10]
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_res = gchart.LineChart(data_source, options={'title': "Average Restaurant Ratings"})
-        queryset = coremodels.LocationBar.objects.filter(company_id = self.request.user.client.company)
+        queryset = coremodels.LocationBar.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')[:10]
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_bar = gchart.LineChart(data_source, options={'title': "Average Bar Ratings"})
-        queryset = coremodels.LocationClub.objects.filter(company_id = self.request.user.client.company)
+        queryset = coremodels.LocationClub.objects.filter(company_id = self.request.user.client.company).order_by('-created_at')[:10]
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_club = gchart.LineChart(data_source, options={'title': "Average Night Club Ratings"}) 
@@ -596,7 +596,7 @@ class AdminCharts(TemplateView):
 
     def get_context_data(self, **kwargs):
         super_context = super(AdminCharts, self).get_context_data(**kwargs)
-        queryset = coremodels.LocationRestaurant.objects.all()
+        queryset = coremodels.LocationRestaurant.objects.all().order_by('-created_at')[:10]
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_res = gchart.LineChart(data_source, options={'title': "Average Restaurant Ratings"})
@@ -604,7 +604,7 @@ class AdminCharts(TemplateView):
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_bar = gchart.LineChart(data_source, options={'title': "Average Bar Ratings"})
-        queryset = coremodels.LocationClub.objects.all()
+        queryset = coremodels.LocationClub.objects.all().order_by('-created_at')[:10]
         data_source = ModelDataSource(queryset,
                                       fields=['title', 'average'])
         line_chart_club = gchart.LineChart(data_source, options={'title': "Average Night Club Ratings"}) 
