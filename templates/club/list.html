@@ -71,15 +71,17 @@
 			<p> {{ location.description }} <p>
 			{% include 'club/specifics.html' with location=location %}
 			</div>
-			<div class="col-md-4 text-right">
-				<h3>{% include 'base/rating.html' with rating=location.get_average_rating %}
+			<div class="col-md-4">
+				<div class='row text-right'>
+				<h3>{% include 'base/rating.html' with rating=location.get_average_rating %}</h3>
 				<img src= "{{location.image_file.url }}" class="img-responsive" max-width='100%'></img>
 				</div>
-			<div class="col-md-4 text-left">
+				<div class='row text-left'>
 				{% if location.hours %}
 				<p><b>Hours:</b></p>
 				<p> {{ location.hours }} </p> 
 				{% endif %}
+				</div>
 			</div>
 		</div>
 	{% endfor %}
