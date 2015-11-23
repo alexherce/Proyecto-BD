@@ -86,17 +86,8 @@ WSGI_APPLICATION = 'project_db.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-ON_HEROKU = os.environ.get('ON_HEROKU')
-
-
-
-
-
-if ON_HEROKU == '1':
-    import dj_database_url
-    DATABASES['default'] =  dj_database_url.config()
-else:
-   DATABASES['default'] =  dj_database_url.config()
+import dj_database_url
+DATABASES['default'] =  dj_database_url.config()
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
