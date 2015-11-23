@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'project_db.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 import dj_database_url
-DATABASES['default'] =  dj_database_url.config(default='postgres://owkzvqhvhvkekh:LiWr8g3Ia0hMpYPTpyNteJa-I9@ec2-54-83-53-120.compute-1.amazonaws.com:5432/d5qulhagiq6toq')
+DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
