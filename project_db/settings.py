@@ -86,8 +86,18 @@ WSGI_APPLICATION = 'project_db.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-import dj_database_url
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+ON_HEROKU = os.environ.get('ON_HEROKU')
+
+if ON_HEROKU == '1':
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
