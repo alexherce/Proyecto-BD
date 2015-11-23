@@ -59,6 +59,9 @@ FOODTYPE_CHOICES = (
  (9, 'Seafood'),
  (10, 'Street vendors'),
  (11, 'Coffee'),
+ (12, 'Food Truck'),
+ (13, 'Gourmet'),
+ (14, 'Japanese'),
  )
  
 PRICE_CHOICES = (

@@ -342,31 +342,31 @@ def login(request):
 # -------------------------------------------------
 
 def get_restaurants_csv(request):
-    restaurants_qs = coremodels.LocationRestaurant.objects.filter(company_id = request.user.client.company)
+    restaurants_qs = coremodels.LocationRestaurant.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return djqscsv.render_to_csv_response(restaurants_qs, append_datestamp=True)
     
 def get_bars_csv(request):
-    qs = coremodels.LocationBar.objects.filter(company_id = request.user.client.company)
+    qs = coremodels.LocationBar.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
 def get_clubs_csv(request):
-    qs = coremodels.LocationClub.objects.filter(company_id = request.user.client.company)
+    qs = coremodels.LocationClub.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
 
 def get_restaurants_reviews_csv(request):
-    restaurants_qs = coremodels.ReviewRestaurant.objects.filter(company_id = request.user.client.company)
+    restaurants_qs = coremodels.ReviewRestaurant.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return djqscsv.render_to_csv_response(restaurants_qs, append_datestamp=True)
     
 def get_bars_reviews_csv(request):
-    qs = coremodels.ReviewBar.objects.filter(company_id = request.user.client.company)
+    qs = coremodels.ReviewBar.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
 def get_clubs_reviews_csv(request):
-    qs = coremodels.ReviewClub.objects.filter(company_id = request.user.client.company)
+    qs = coremodels.ReviewClub.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
 def get_restaurants_pdf(request):
-    results = coremodels.LocationRestaurant.objects.filter(company_id = request.user.client.company)
+    results = coremodels.LocationRestaurant.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return render_to_pdf(
             'restaurant/pdf.html',
             {
@@ -376,7 +376,7 @@ def get_restaurants_pdf(request):
         )
         
 def get_bars_pdf(request):
-    results = coremodels.LocationBar.objects.filter(company_id = request.user.client.company)
+    results = coremodels.LocationBar.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return render_to_pdf(
             'bar/pdf.html',
             {
@@ -386,7 +386,7 @@ def get_bars_pdf(request):
         )
     
 def get_clubs_pdf(request):
-    results = coremodels.LocationClub.objects.filter(company_id = request.user.client.company)
+    results = coremodels.LocationClub.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return render_to_pdf(
             'club/pdf.html',
             {
@@ -396,7 +396,7 @@ def get_clubs_pdf(request):
         )
         
 def get_restaurants_reviews_pdf(request):
-    results = coremodels.ReviewRestaurant.objects.filter(company_id = request.user.client.company)
+    results = coremodels.ReviewRestaurant.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return render_to_pdf(
             'base/pdf_reviews.html',
             {
@@ -406,7 +406,7 @@ def get_restaurants_reviews_pdf(request):
         )
         
 def get_bars_reviews_pdf(request):
-    results = coremodels.ReviewBar.objects.filter(company_id = request.user.client.company)
+    results = coremodels.ReviewBar.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return render_to_pdf(
             'base/pdf_reviews.html',
             {
@@ -416,7 +416,7 @@ def get_bars_reviews_pdf(request):
         )
 
 def get_clubs_reviews_pdf(request):
-    results = coremodels.ReviewClub.objects.filter(company_id = request.user.client.company)
+    results = coremodels.ReviewClub.objects.filter(company_id = request.user.client.company).order_by('-created_at')
     return render_to_pdf(
             'base/pdf_reviews.html',
             {
@@ -432,31 +432,31 @@ def get_clubs_reviews_pdf(request):
 # -------------------------------------------------
 
 def get_restaurants_admin_csv(request):
-    restaurants_qs = coremodels.LocationRestaurant.objects.all()
+    restaurants_qs = coremodels.LocationRestaurant.objects.all().order_by('-created_at')
     return djqscsv.render_to_csv_response(restaurants_qs, append_datestamp=True)
     
 def get_bars_admin_csv(request):
-    qs = coremodels.LocationBar.objects.all()
+    qs = coremodels.LocationBar.objects.all().order_by('-created_at')
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
 def get_clubs_admin_csv(request):
-    qs = coremodels.LocationClub.objects.all()
+    qs = coremodels.LocationClub.objects.all().order_by('-created_at')
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
 
 def get_restaurants_reviews_admin_csv(request):
-    restaurants_qs = coremodels.ReviewRestaurant.objects.all()
+    restaurants_qs = coremodels.ReviewRestaurant.objects.all().order_by('-created_at')
     return djqscsv.render_to_csv_response(restaurants_qs, append_datestamp=True)
     
 def get_bars_reviews_admin_csv(request):
-    qs = coremodels.ReviewBar.objects.all()
+    qs = coremodels.ReviewBar.objects.all().order_by('-created_at')
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
 def get_clubs_reviews_admin_csv(request):
-    qs = coremodels.ReviewClub.objects.all()
+    qs = coremodels.ReviewClub.objects.all().order_by('-created_at')
     return djqscsv.render_to_csv_response(qs, append_datestamp=True)
     
 def get_restaurants_admin_pdf(request):
-    results = coremodels.LocationRestaurant.objects.all()
+    results = coremodels.LocationRestaurant.objects.all().order_by('-created_at')
     return render_to_pdf(
             'restaurant/pdf.html',
             {
@@ -466,7 +466,7 @@ def get_restaurants_admin_pdf(request):
         )
         
 def get_bars_admin_pdf(request):
-    results = coremodels.LocationBar.objects.all()
+    results = coremodels.LocationBar.objects.all().order_by('-created_at')
     return render_to_pdf(
             'bar/pdf.html',
             {
@@ -476,7 +476,7 @@ def get_bars_admin_pdf(request):
         )
     
 def get_clubs_admin_pdf(request):
-    results = coremodels.LocationClub.objects.all()
+    results = coremodels.LocationClub.objects.all().order_by('-created_at')
     return render_to_pdf(
             'club/pdf.html',
             {
@@ -486,7 +486,7 @@ def get_clubs_admin_pdf(request):
         )
         
 def get_restaurants_reviews_admin_pdf(request):
-    results = coremodels.ReviewRestaurant.objects.all()
+    results = coremodels.ReviewRestaurant.objects.all().order_by('-created_at')
     return render_to_pdf(
             'base/pdf_reviews.html',
             {
@@ -496,7 +496,7 @@ def get_restaurants_reviews_admin_pdf(request):
         )
         
 def get_bars_reviews_admin_pdf(request):
-    results = coremodels.ReviewBar.objects.all()
+    results = coremodels.ReviewBar.objects.all().order_by('-created_at')
     return render_to_pdf(
             'base/pdf_reviews.html',
             {
@@ -506,7 +506,7 @@ def get_bars_reviews_admin_pdf(request):
         )
 
 def get_clubs_reviews_admin_pdf(request):
-    results = coremodels.ReviewClub.objects.all()
+    results = coremodels.ReviewClub.objects.all().order_by('-created_at')
     return render_to_pdf(
             'base/pdf_reviews.html',
             {
