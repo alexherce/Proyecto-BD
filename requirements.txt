@@ -22,4 +22,4 @@ nose==1.0.0
 pyPdf2==1.19
 reportlab==2.5
 django-graphos==0.1.1
-xhtml2pdf==0-0-6
+xhtml2pdf==0.0.6
